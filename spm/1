@@ -55,6 +55,14 @@
 			</div>
 			<br />
 
+			<div id="memberName">
+				<input type="text" id="memberName" name="memberName"
+					placeholder="닉네임" /> <br /> <span class="memberNameInputRe0">닉네임을
+					입력해주세요</span>
+
+			</div>
+			<br />
+
 			<div id="memberAddr">
 				<input type="text" id="memberAddr1" name="memberAddr1"
 					readonly="readonly" /> <br /> <input type="text" id="memberAddr2"
@@ -65,7 +73,7 @@
 			</div>
 			<br />
 
-			<button type="button">완료</button>
+			<button id="doneBtn" type="button">완료</button>
 		</form>
 	</div>
 
@@ -73,17 +81,16 @@
 
 	<!-- 인증버튼 동작  -->
 	<script>
-		$("#mailCertBtn").on("click", function() {
+		/* $("#mailCertBtn").on("click", function() {
 			var email = $("#mail").val();
 			var mailCertBox = $("#mailCert");
 
-			if (mailFormCheck(email)){
-				
+			if (mailFormCheck(email)) {
+
 			}
 
-		});//
+		}); *///
 
-		
 		/* 입력 이메일 형식 유효성 검사 */
 		function mailFormCheck(email) {
 			var form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -94,12 +101,31 @@
 
 
 
-	<!-- 완료버튼 동작  -->
+
 	<script
 		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+
+
+	
 	<script>
-	/* $("span").css('display', 'none'); */
-		var code = "";
+	
+	 $("span").css('display', 'none'); 
+	
+	<!-- 완료버튼 동작  -->
+		$("#doneBtn").on("click", function() {
+
+			var id = $('#mail').val();
+			var pw = $('#memberPw').val();
+			var pwCk = $('#memberPwCk').val();
+			var name = $('#memberName').val();
+			var addr = $('#memberAddr3').val();
+			
+			if(mail==''){
+				$('.mailInputRe0').css('display','inline');
+			}
+
+		});//jobtn
 	</script>
 
 
