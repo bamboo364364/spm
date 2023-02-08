@@ -1,1 +1,15 @@
-02
+회원정보
+create table spm_member(
+memberMail varchar2(50) not null primary key,
+memberPw varchar2(100) not null,
+memberName varchar2(30) not null,
+memberAddr1 varchar2(100) not null,
+memberAddr2 varchar2(100) not null,
+memberAddr3 varchar2(100) not null,
+adminCk number not null,
+money number not null,
+point number not null,
+regDate date 
+);
+
+
