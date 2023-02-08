@@ -24,7 +24,7 @@ public class MemberController {
 	private BCryptPasswordEncoder pwEncoder;
 	
 	
-	@GetMapping("/signup")
+	@GetMapping("/join")
 	public void signinGet() {
 		logger.info("회원가입페이지 진입");
 	}
