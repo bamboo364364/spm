@@ -1,5 +1,7 @@
 # spm
 
-@ajax internet500: mybatis seq 위치
+사용버전
 
-@동적html ""강제스트링
+sts-3.9.11
+java 11
+oracle 19c 
