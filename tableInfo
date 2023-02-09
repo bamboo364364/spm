@@ -1,4 +1,4 @@
-회원정보
+회원
 create table spm_member(
 memberMail varchar2(50) not null primary key,
 memberPw varchar2(100) not null,
@@ -13,5 +13,101 @@ regDate date
 );
 
 상품
+create table spm_good(
+goodId number generated as identity(start with 1) primary key,
+goodName varchar2(50) not null,
+cateCode varchar2(30),
+goodPrice number not null ,
+goodStock number not null,
+goodDiscount number(2,2),
+goodIntro clob,
+goodContents clob,
+regDate date,
+modDate date,
+ratingAvg number(2,1),
+foreign key(cateCode) references spm_cate(cateCode)
+);
+
+카테고리
+create table spm_cate(
+tier number(1) not null,
+cateName varchar2(30) not null,
+cateCode varchar2(30) not null primary key,
+cateParent varchar2(30),
+foreign key(cateParent) references spm_cate(cateCode)
+);
+
+카테고리 내용
+insert into spm_cate(tier, cateName, cateCode) values (1, '장비', '100000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '스키', '101000','10000');    
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '플레이트', '101001','101000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '부츠', '101002','101000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '보드', '102000','100000');    
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '데크', '102001','102000');    
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '부츠', '102002','102000');    
+insert into spm_cate(tier, cateName, cateCode) values (1, '기타', '200000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '의류', '201000','200000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '남성의류', '201001','201000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '여성의류', '201002','201000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '잡화', '202000','200000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '고글', '202001','202000');
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '헬멧', '202002','202000');
+
+장바구니
+create table spm_cart(
+cartId number generated as identity (start with 1) primary key,
+memberMail varchar2(50),
+goodId number,
+goodCount number,
+foreign key (memberMail) references spm_member(memberMail),
+foreign key (goodId) references spm_good(goodId)
+);
+
+주문
+create table spm_order(
+orderId varchar2(50) primary key,
+addressee varchar2(50) not null,
+memberMail varchar2(50),
+memberAddr1 varchar2(100) not null,
+memberAddr2 varchar2(100) not null,
+memberAddr3 varchar2(100) not null,
+orderState varchar2(30) not null,
+deliveryCost number not null,
+usePoint number not null,
+orderDate date default sysdate,
+FOREIGN KEY (memberMail)REFERENCES spm_member(memberMail)
+);
+
+주문상품
+create table spm_orderItem(
+orderItemId number generated always as IDENTITY primary key,
+orderId varchar2(50),
+goodId number,
+goodCount number not null,
+goodPrice number not null,
+goodDiscount number not null,
+savePoint number not null,
+FOREIGN KEY (orderId) REFERENCES spm_order(orderId),
+FOREIGN KEY (goodId) REFERENCES spm_good(goodId)
+);
+
+댓글
+create table spm_reply(
+replyId number primary key,
+goodId number not null,
+memberMail varchar2(50) not null,
+regDate date default sysdate,
+replyContent varchar2(3500),
+rating number(2,1),
+reLevel number not null,
+FOREIGN KEY (memberMail)REFERENCES spm_member(memberMail),
+FOREIGN KEY (goodId) REFERENCES spm_good(goodId)
+);
+
+댓글아이디시퀸스
+create sequence spm_reply_seq
+increment by 1 start with 1 minvalue 1 maxvalue 9999 nocycle nocache noorder;
+
+
 
 
