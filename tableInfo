@@ -22,6 +22,7 @@ goodStock number not null,
 goodDiscount number(2,2),
 goodIntro clob,
 goodContents clob,
+goodMaker varchar2(50),
 regDate date,
 modDate date,
 ratingAvg number(2,1),
@@ -39,7 +40,7 @@ foreign key(cateParent) references spm_cate(cateCode)
 
 카테고리 내용
 insert into spm_cate(tier, cateName, cateCode) values (1, '장비', '100000');
-insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '스키', '101000','10000');    
+insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '스키', '101000','100000');    
 insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '플레이트', '101001','101000');
 insert into spm_cate(tier, cateName, cateCode, cateParent) values (3, '부츠', '101002','101000');
 insert into spm_cate(tier, cateName, cateCode, cateParent) values (2, '보드', '102000','100000');    
