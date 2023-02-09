@@ -12,4 +12,6 @@ point number not null,
 regDate date 
 );
 
+상품
+
 
