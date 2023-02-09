@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.mapper.MemberMapper">
+
+	<!-- 회원가입 -->
+	<insert id="memberJoin">
+		insert into spm_member values(#{memberMail},
+		#{memberPw}, #{memberName},
+		#{memberAddr1}, #{memberAddr2},
+		#{memberAddr3}, 0, 100000, 5000, sysdate)
+	</insert>
+
+	<!-- 메일중복검사 -->
+	<select id="memberMailDupCheck" resultType="int">
+		select count(*) from
+		spm_member where memberMail= #{memberMail}
+	</select>
+	
+	
+	<!-- 로그인 -->
+  	<select id="memberLogin" resultType="com.mycompany.model.MemberVO">
+  	
+  		select memberMail, memberPw, memberName, adminCk, money, point from spm_member where memberMail = #{memberMail}
+  		
+  	</select>
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -29,8 +29,38 @@ h1, #upNav {
 <body>
 	<h1>쇼핑몰</h1>
 	<div id="upNav">
-		<a href="/member/join">회원가입</a>
+		<c:if test="${member==null}">
+		<a href="/member/join">회원가입</a> <a href="/member/login">로그인</a>
+		</c:if>
+		<c:if test="${member!=null}">
+			<c:if test="${member.adminCk==1}">
+			<a href="/admin/main">관리자페이지</a> 
+			</c:if>
+			<a id="logout">로그아웃</a> <a href="/member/admin/myroom/${member.memberMail}">마이룸</a>
+			<a href="/cart/${member.memberMail}">장바구니</a><br />
+			<span>충전금액<fmt:formatNumber value="${member.money}" pattern="\#,###.##"/></span>
+			<span>포인트<fmt:formatNumber value="${member.point}" pattern="\#,###.##"/></span>
+			
+		</c:if>
 	</div>
+	
+	<script>
+	
+	/* 로그아웃작동 */
+	$("#logout").click(function(){
+		$.ajax({
+			type:'post',
+			url:'/member/logoutHome',
+			success: function(data){
+				alert("로그아웃성공");
+				document.location.reload();
+			}
+			
+		});//ajx
+			});//lgout
+	
+	
+	</script>
 
 
 

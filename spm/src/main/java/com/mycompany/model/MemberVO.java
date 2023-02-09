@@ -3,7 +3,7 @@ package com.mycompany.model;
 import java.util.Date;
 
 
-public class memberVO {
+public class MemberVO {
 
 	private String memberMail;
 	private String memberPw;
