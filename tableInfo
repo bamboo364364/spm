@@ -92,6 +92,16 @@ FOREIGN KEY (orderId) REFERENCES spm_order(orderId),
 FOREIGN KEY (goodId) REFERENCES spm_good(goodId)
 );
 
+이미지첨부
+create table spm_image(
+goodId int ,
+fileName varchar2(100) not null,
+uploadPath varchar2(200) not null,
+uuid varchar2(100)not null ,
+primary key (uuid),
+foreign key (goodId) references spm_good(goodId)
+);
+
 댓글
 create table spm_reply(
 replyId number primary key,
