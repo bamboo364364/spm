@@ -12,31 +12,15 @@
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-<style>
-#upNav {
-	float: right;
-}
+<style>#sideNavLi4{background-color: gray;}
 </style>
 </head>
 <body>
+	<p>관리자페이지입니다</p>
 
-	<div id="upNav">
-		<a href="/">홈페이지</a> <a href="/member/logoutRedirect">로그아웃</a>
-	</div>
+	<%@include file="../includes/adminHeader.jsp" %>
+	
 
-	<div id="sideNav" aaa='bbb'>
-		
-			<div><a id="sideNavLi1" href="/admin/goodManage">상품관리</a></div>
-			<div><a id="sideNavLi2" href="/admin/goodEnroll">상품등록</a></div>
-			<div><a id="sideNavLi3" href="/admin/memberManage">회원관리</a></div>
-			<div><a id="sideNavLi4" href="/admin/orderList">주문현황</a></div>
-		
-	</div>
-	
-	<script>
-	
-	
-	</script>
 
 
 </body>

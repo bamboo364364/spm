@@ -25,9 +25,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.model.AttachImageVO;
+import com.mycompany.model.Criteria;
+import com.mycompany.model.GoodVO;
+import com.mycompany.model.PageDTO;
 import com.mycompany.service.AdminService;
 
 import net.coobird.thumbnailator.Thumbnails;
@@ -35,31 +40,105 @@ import net.coobird.thumbnailator.Thumbnails;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
 	private AdminService adminService;
-	
-	
+
 	/* 관리자메인 이동 */
 	@GetMapping("/main")
-	public void adminMainGet() throws Exception{
+	public void adminMainGet() throws Exception {
 		logger.info("관리자페이지 진입");
 	}
-	
+
 	/* 상품등록페이지 이동 */
-	@GetMapping("/goodsEnroll")
-	public void goodsEnrollGet(Model model) throws Exception{
+	@GetMapping("/goodEnroll")
+	public void goodEnrollGet(Model model) throws Exception {
 		logger.info("상품등록페이지 진입");
-		
-		ObjectMapper mapper= new ObjectMapper();
-		List list= adminService.cateList();
-		String cateList= mapper.writeValueAsString(list);
+
+		ObjectMapper mapper = new ObjectMapper();
+		List list = adminService.cateList();
+		String cateList = mapper.writeValueAsString(list);
 		model.addAttribute("cateList", cateList);
 	}
+
+	/* 상품 등록 */
+	@PostMapping("/goodEnroll")
+	public String goodEnrollPOST(GoodVO good, RedirectAttributes rttr) {
+
+		// ckEditor p태그
+		good.setGoodContents(good.getGoodContents().replace("<p>", ""));
+		good.setGoodContents(good.getGoodContents().replace("</p>", ""));
+
+		logger.info("goodsEnrollPOST......" + good);
+		adminService.goodEnroll(good);
+		
+		rttr.addFlashAttribute("enroll_result", good.getGoodName());
+
+		return "redirect:/admin/goodManage";
+	}
+
+	/* 상품 관리(상품목록) 페이지 접속 */
+	@GetMapping("/goodManage")
+	public void goodManageGET(Criteria cri, Model model) throws Exception {
+
+		logger.info("상품 관리(상품목록) 페이지 접속");
+	
+		/* 상품 리스트 데이터 */
+		List list = adminService.goodGetList(cri);
+
+		if (!list.isEmpty()) {
+			model.addAttribute("list", list);
+		} else {
+			model.addAttribute("listCheck", "empty");
+		
+		}
+		
+		/* 페이지 인터페이스 데이터 */
+		
+		model.addAttribute("pageMaker", new PageDTO(cri, adminService.goodGetTotal(cri)));
+
+	}// goodManage
 	
 	
+	/* 상품 조회 페이지, 상품 수정 페이지 */
+	@GetMapping({ "/goodsDetail", "/goodsModify" })
+	public void goodsGetInfoGET(Criteria cri, Model model) throws JsonProcessingException {
+
+		logger.info("goodsGetInfo()........." + cri.getgoodId());
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		/* 카테고리 리스트 데이터 */
+		model.addAttribute("cateList", mapper.writeValueAsString(adminService.cateList()));
+
+		/* 목록 페이지 조건 정보 */
+		model.addAttribute("cri", cri);
+
+		/* 조회 페이지 정보 */
+		model.addAttribute("goodsInfo", adminService.goodGetDetail(cri.getgoodId()));
+
+	}//goodInfo
+	
+	
+	/* 상품 정보 수정 */
+	@PostMapping("/goodsModify")
+	public String goodsModifyPOST(GoodVO vo, RedirectAttributes rttr) {
+
+		logger.info("goodsModifyPOST.........." + vo);
+
+		int result = adminService.goodModify(vo);
+
+		rttr.addFlashAttribute("modify_result", result);
+
+		return "redirect:/admin/goodsManage";
+
+	}//goodModify
+	
+	
+	
+
 	/* 첨부 파일 업로드 */
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<AttachImageVO>> uploadAjaxActionPOST(MultipartFile[] uploadFile) {
@@ -136,24 +215,22 @@ public class AdminController {
 
 				/* 썸네일 생성(ImageIO) */
 				/*
-				File thumbnailFile = new File(uploadPath, "s_" + uploadFileName); 
-				
-				BufferedImage bo_image = ImageIO.read(saveFile);
-				
-					//비율 
-					double ratio = 3;
-					//넓이 높이
-					int width = (int) (bo_image.getWidth() / ratio);
-					int height = (int) (bo_image.getHeight() / ratio);				
-				
-				BufferedImage bt_image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-								
-				Graphics2D graphic = bt_image.createGraphics();
-				
-				graphic.drawImage(bo_image, 0, 0,width,height, null);
-					
-				ImageIO.write(bt_image, "jpg", thumbnailFile);				
-				*/
+				 * File thumbnailFile = new File(uploadPath, "s_" + uploadFileName);
+				 * 
+				 * BufferedImage bo_image = ImageIO.read(saveFile);
+				 * 
+				 * //비율 double ratio = 3; //넓이 높이 int width = (int) (bo_image.getWidth() /
+				 * ratio); int height = (int) (bo_image.getHeight() / ratio);
+				 * 
+				 * BufferedImage bt_image = new BufferedImage(width, height,
+				 * BufferedImage.TYPE_3BYTE_BGR);
+				 * 
+				 * Graphics2D graphic = bt_image.createGraphics();
+				 * 
+				 * graphic.drawImage(bo_image, 0, 0,width,height, null);
+				 * 
+				 * ImageIO.write(bt_image, "jpg", thumbnailFile);
+				 */
 
 				/* 방법 2 */
 				File thumbnailFile = new File(uploadPath, "s_" + uploadFileName);
@@ -217,19 +294,5 @@ public class AdminController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 
 	}
-	
-	
-	
-	
 
-
-
-
-
-
-
-
-
-
-
-}//clss
+}// class

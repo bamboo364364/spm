@@ -12,7 +12,8 @@
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-
+<style>#sideNavLi3{background-color: gray;}
+</style>
 </head>
 <body>
 	<p>관리자페이지입니다</p>

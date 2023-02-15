@@ -22,30 +22,31 @@
 		<form id="joinForm" action="/member/join" method="post">
 			<div>
 				<input type="text" id="memberMail" name="memberMail" placeholder="메일주소" />
-				<br /> <span class="memberMailInputRe0">메일주소를 입력해주세요</span> <span class="memberMailInputRe1">이미 존재합니다</span> <br />
-				<button id="memberMailCertBtn" type="button">인증번호 전송</button>
+				<br /> <div class="memberMailWarn"></div>
+				
+				<button id="memberMailCertBtn" type="button" disabled="disabled">인증번호 전송</button>
 				<br />
-				<input type="text" id="memberMailCert" placeholder="인증번호" />
-				<br /> <span class="memberMailCertRe"></span>
+				<input type="text" id="memberMailCert" placeholder="인증번호" disabled="disabled" />
+				<br /> <div class="memberMailCertWarn"></div>
 
 			</div>
 			<br />
 
 			<div>
 				<input type="text" id="memberPw" name="memberPw" placeholder="사용할 비밀번호" />
-				<br /> <span class="memberPwInputRe0">비밀번호를 입력해주세요</span> 
+				<br /> <div class="memberPwWarn"></div> 
 			</div>
 			<br />
 
 			<div>
 				<input type="text" id="memberPwCk" name="memberPwCk" placeholder="사용할 비밀번호 확인" />
-				<br /> <span class="memberPwCkInputRe0">비밀번호확인을 입력해주세요</span> <span class="memberPwCkInputRe1">일치하지않습니다</span> 
+				<br /> <div class="memberPwCkWarn"></div>
 			</div>
 			<br />
 
 			<div>
 				<input type="text" id="memberName" name="memberName" placeholder="닉네임" />
-				<br /> <span class="memberNameInputRe0">닉네임을 입력해주세요</span>
+				<br /> <div class="memberNameWarn"></div>
 
 			</div>
 			<br />
@@ -58,7 +59,7 @@
 				<button type="button" onclick="executionDaumAddress()">주소찾기</button>
 				<br />
 				<input type="text" id="memberAddr3" name="memberAddr3" readonly="readonly" placeholder="거주지 주소 상세" />
-				<br /> <span class="memberAddr3InputRe0">상세주소를 입력해주세요</span>
+				<br /> <div class="memberAddr3Warn"></div>
 			</div>
 			<br />
 
@@ -78,139 +79,132 @@
 
 
 	<script>
-		$("span").css('display', 'none');
+		
 
 		var code = ""; //메일전송인증번호저장용 코드
 
 		var memberMailCheck = false;
-		var memberMailDupCheck = false; //메일중복
+		/* var memberMailDupCheck = false; */  //메일중복
 		var memberMailCertCheck = false; //메일 인증번호
 		var memberPwCheck = false;
-		var memberPwCkCheck = false; //비번확인
-		var memberPwCorCheck = false; //비번 비번확인 일치
+		var memberPwCkCheck = false;  //비번확인
+		/* var memberPwCorCheck = false; */ //비번 비번확인 일치
 		var memberNameCheck = false;
 		var memberAddr3Check = false;
 
-		/* 완료버튼동작 */
-		$(document)
-				.ready(
+		/* 완료버튼동작(공란검사) */
+		$(document).ready(function() {
+				
+				$('.memberMailWarn').css('color','red');
+				$('.memberMailWarn').html('메일을 입력해주세요');
+				
+				$('.memberMailCertWarn').css('color','red');
+				$('.memberMailCertWarn').html('인증번호를 입력해주세요');
+						
+				$('.memberPwWarn').css('color','red');
+				$('.memberPwWarn').html('비밀번호를 입력해주세요');
+				
+				$('.memberPwCkWarn').css('color','red');
+				$('.memberPwCkWarn').html('비밀번호확인을 입력해주세요');
+				
+				$('.memberNameWarn').css('color','red');
+				$('.memberNameWarn').html('닉네임을 입력해주세요');
+				
+				$('.memberAddr3Warn').css('color','red');
+				$('.memberAddr3Warn').html('주소를 입력해주세요');
+				
+				
+				});//documentReady
+				
+				/* $('#memberMail').on("propertychange change keyup paste input",function(){
+						if($('#memberMail').val() == '') {
+							$('.memberMailWarn').css('color','red');
+							$('.memberMailWarn').html('메일을 입력해주세요');
+							memberMailCheck = false; 
+						}
+						});//propertyChange */
+				
+				$('#memberPw').on("propertychange change keyup paste input",function(){
+						if($('#memberPw').val()) {
+							$('.memberPwWarn').css('color', 'green');
+							$('.memberPwWarn').html('비밀번호 입력확인');
+							memberPwCheck = true;
+						}else{
+							$('.memberPwWarn').css('color','red');
+							$('.memberPwWarn').html('비밀번호를 입력해주세요');
+							memberPwCheck = false;
+						}
+						});//propertyChange
+						
+				$('#memberName').on("propertychange change keyup paste input",function(){
+						if($('#memberName').val()) {
+							$('.memberNameWarn').css('color', 'green');
+							$('.memberNameWarn').html('닉네임 입력확인');
+							memberNameCheck = true;
+						}else{
+							$('.memberNameWarn').css('color','red');
+							$('.memberNameWarn').html('닉네임을 입력해주세요');
+							memberNameCheck = false;
+						}
+						});//propertyChange
+						
+				$('#memberAddr3').on("propertychange change keyup paste input",function(){
+						if($('#memberAddr3').val()) {
+							$('.memberAddr3Warn').css('color', 'green');
+							$('.memberAddr3Warn').html('주소 입력확인');
+							memberAddr3Check = true;
+						}else{
+							$('.memberAddr3Warn').css('color','red');
+							$('.memberAddr3Warn').html('주소를 입력해주세요');
+							memberAddr3Check = false;
+						}
+						});//propertyChange
+						
+						
+						
+						
+						
+							
+						
+						
+
+		/* 메일검사(형식 중복) */
+		$('#memberMail').on("propertychange change keyup paste input",
 						function() {
-							$("#doneBtn")
-									.on(
-											"click",
-											function() {
-
-												let memberMail = $(
-														'#memberMail').val();
-												let memberPw = $('#memberPw')
-														.val();
-												let memberPwCk = $(
-														'#memberPwCk').val();
-												let memberName = $(
-														'#memberName').val();
-												let memberAddr3 = $(
-														'#memberAddr3').val();
-
-												/* 기본 입력했는지체크들 */
-												if (memberMail == '') {
-													$('.memberMailInputRe0')
-															.css('display',
-																	'block');
-													memberMailCheck = false;
-												} else {
-													$('.memberMailInputRe0')
-															.css('display',
-																	'none');
-													memberMailCheck = true;
-												}
-												if (memberPw == '') {
-													$('.memberPwInputRe0').css(
-															'display', 'block');
-													memberPwCheck = false;
-												} else {
-													$('.memberPwInputRe0').css(
-															'display', 'none');
-													memberPwCheck = true;
-												}
-												if (memberPwCk == '') {
-													$('.memberPwCkInputRe0')
-															.css('display',
-																	'block');
-													memberPwCkCheck = false;
-												} else {
-													$('.memberPwCkInputRe0')
-															.css('display',
-																	'none');
-													memberPwCkCheck = true;
-												}
-												if (memberName == '') {
-													$('.memberNameInputRe0')
-															.css('display',
-																	'block');
-													memberNameCheck = false;
-												} else {
-													$('.memberNameInputRe0')
-															.css('display',
-																	'none');
-													memberNameCheck = true;
-												}
-												if (memberAddr3 == '') {
-													$('.memberAddr3InputRe0')
-															.css('display',
-																	'block');
-													memberAddr3Check = false;
-												} else {
-													$('.memberAddr3InputRe0')
-															.css('display',
-																	'none');
-													memberAddr3Check = true;
-												}
-
-												/* 최종검사 */
-												if (memberMailCheck
-														&& memberMailDupCheck
-														&& memberMailCertCheck
-														&& memberPwCheck
-														&& memberPwCkCheck
-														&& memberPwCorCheck
-														&& memberNameCheck
-														&& memberAddr3Check) {
-													$("#joinForm").submit();
-												}
-											
-												return false;
-
-											});//jobtn
-						});//docredy
-
-		/* 메일중복검사 */
-		$('#memberMail')
-				.on("propertychange change keyup paste input",
-						function() {
+					
 							let memberMail = $('#memberMail').val();
-							let data = {
-								memberMail : memberMail
-							};
-
+							
+							let data = {memberMail : memberMail};
+							
+						
+							
+							
+							//형식
+							if( mailFormCheck(memberMail) ){
+							
 							$.ajax({
 										type : 'post',
 										url : '/member/memberMailDupCheck',
 										data : data,
 										success : function(result) {
-
+											
+									
 											if (result != 'fail') {
-												$(".memberMailInputRe1").css(
-														"display", "none");
-												memberMailDupCheck = true;
+												$('.memberMailWarn').css('color','green');
+												$('.memberMailWarn').html('사용가능!');
+												memberMailCheck = true; 
+												$('#memberMailCertBtn').removeAttr('disabled');
 											} else {
-												$(".memberMailInputRe1").css(
-														"display",
-														"inline-block");
-												memberMailDupCheck = false;
+												$('.memberMailWarn').css('color','red');
+												$('.memberMailWarn').html('이미 가입된 메일!');
+												memberMailCheck = false;
+												$('#memberMailCertBtn').attr('disabled', 'disabled');
+												
 											}
-										}//scs
+											}//sucess
+									
 										,
-										error : function(x, e) {
+										error: function(x, e) {
 											if (x.status == 0) {
 												alert('You are offline!!n Please Check Your Network.');
 											} else if (x.status == 404) {
@@ -226,9 +220,19 @@
 														+ x.responseText);
 											}
 										} //err
-									})
-						});//mmal.prpchng
+									}); //ajx
+									
+							}//if
+							else{
+								$('.memberMailWarn').html('메일형식에 맞지않습니다');
+								$('.memberMailWarn').css('color','red');
+								$('#memberMailCertBtn').attr('disabled', 'disabled');
+								memberMailCheck = false;
+							}
+				
+						});//propertyChange
 
+						
 		/* 입력 메일 형식 유효성 검사 */
 		function mailFormCheck(memberMail) {
 			var form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -237,19 +241,12 @@
 
 		/* 인증번호이메일전송 */
 		$("#memberMailCertBtn").on("click", function() {
-
+			$('#memberMailCert').removeAttr('disabled');
+			$('.memberMailCertWarn').css('color','black');
+      $('.memberMailCertWarn').html("인증번호가 발송되었습니다");
 			let memberMail = $("#memberMail").val();
-			let memberMailCertInput = $("#memberMailCert");
-			let memberMailCertRe = $(".memberMailCertRe");
-
-			if (mailFormCheck(memberMail)) {
-				memberMailCertRe.html("메일이 전송되었습니다, 확인해주세요");
-				memberMailCertRe.css("display", "inline-block");
-			} else {
-				memberMailCertRe.html("올바르지못한 메일형식입니다");
-				memberMailCertRe.css("display", "inline-block");
-				return false;
-			}
+			let memberMailCert = $("#memberMailCert");
+			
 
 			$.ajax({
 				type : 'get',
@@ -268,37 +265,40 @@
 		$("#memberMailCert").blur(function() {
 
 			let memberMailCert = $("#memberMailCert").val();
-			let memberMailCertRe = $(".memberMailCertRe");
+			let memberMailCertWarn = $(".memberMailCertWarn");
 
-			if (memberMailCert == code) {
-				memberMailCertRe.html("인증번호 일치");
+			if (memberMailCert == code && memberMailCert!='') {
+				 memberMailCertWarn.css('color','green');
+				memberMailCertWarn.html("인증번호 일치");
 				memberMailCertCheck = true;
 			} else {
-				memberMailCertRe.html("인증번호 불일치");
+				memberMailCertWarn.css('color','red');
+				memberMailCertWarn.html("인증번호 불일치");
 				memberMailCertCheck = false;
 			}
 
 		});
 
 		/* 비번 비번확인일치검사 */
-		$('#memberPwCk').on("propertychange change keyup paste input",
+		$('#memberPwCk, #memberPw').on("propertychange change keyup paste input",
 				function() {
 
 					let memberPw = $('#memberPw').val();
 					let memberPwCk = $('#memberPwCk').val();
 
-					$(".memberPwCkInputRe0").css('display', 'none');
+					
 
 					if (memberPw == memberPwCk) {
-						$(".memberPwCkInputRe1").css('display', 'none');
-						$(".memberPwCkInputRe2").css('display', 'block');
-						memberPwCorCheck = true;
+						$(".memberPwCkWarn").css('color', 'green');
+						$(".memberPwCkWarn").html('일치합니다!');
+						
+						memberPwCkCheck = true;
 					} else {
-						$(".memberPwCkInputRe1").css('display', 'block');
-						$(".memberPwCkInputRe2").css('display', 'none');
-						memberPwCorCheck = false;
+						$(".memberPwCkWarn").css('color', 'red');
+						$(".memberPwCkWarn").html('불일치!');
+						memberPwCkCheck = false;
 					}
-				});
+				}); 
 
 		/* 다음주소연동 */
 
@@ -360,7 +360,18 @@
 						}
 					}).open();
 
-		}//exdamaddr
+		}//daum
+		
+		//완료
+		$('#doneBtn').on('click', function(){
+			
+			if(memberMailCheck&&memberMailCertCheck&&memberPwCheck&&memberPwCkCheck&&memberNameCheck&&memberAddr3Check){
+				alert('회원가입 성공, 로그인해주세요');
+				$('#joinForm').submit();
+			}
+			else{alert('다시 입력해주세요');
+			}
+		});
 	</script>
 
 

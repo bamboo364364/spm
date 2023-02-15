@@ -16,9 +16,7 @@ public class Criteria {
 	/* 검색 키워드 */
 	private String keyword;
 	
-	/* 작가 리스트 */
-	private String[] authorArr;
-	
+
 	/*검색카테*/
 	private String searchCateCode;
 	
@@ -46,21 +44,6 @@ public class Criteria {
 	private String contentId;
 	
 	
-	
-	
-	/*private String[] memberArr;
-	
-	public String[] getMemberArr() {
-		return memberArr;
-	}
-	
-	public void setMemberArr(String[] memberArr) {
-		this.memberArr = memberArr;
-	}*/
-
-	
-
-	
 
 	
 
@@ -77,16 +60,16 @@ public class Criteria {
 
 	
 	/* 상품 번호(댓글 기능에서 사용) */
-	private int bookId;
+	private int goodId;
 	
-	private String memberId;
+	private String memberMail;
 	
-	public String getMemberId() {
-		return memberId;
+	public String getmemberMail() {
+		return memberMail;
 	}
 	
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
+	public void setmemberMail(String memberMail) {
+		this.memberMail = memberMail;
 	}
 	
 	public String getMemberAddr2() {
@@ -103,17 +86,13 @@ public class Criteria {
 	public Criteria(int pageNum, int amount/*, String keyword, int kjdId, String type*/) {
 		this.pageNum = pageNum;
 		this.amount = amount;
-		
-		/*this.keyword= keyword;
-		this.kjbId= kjdId;
-		this.type= type;*/
-		
+
 		 
 	}
 	
 	/* Criteria 기본 생성자 */
 	public Criteria(){
-		this(1, 10/*,"",1,"C"*/);
+		this(1, 10);
 	}
 	
 	/* 검색 타입 데이터 배열 변환 */
@@ -153,13 +132,6 @@ public class Criteria {
 		this.keyword = keyword;
 	}
 
-	public String[] getAuthorArr() {
-		return authorArr;
-	}
-
-	public void setAuthorArr(String[] authorArr) {
-		this.authorArr = authorArr;
-	}
 
 	public String getCateCode() {
 		return cateCode;
@@ -169,34 +141,24 @@ public class Criteria {
 		this.cateCode = cateCode;
 	}
 	
-	public int getBookId() {
-		return bookId;
+	public int getgoodId() {
+		return goodId;
 	}
 
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
+	public void setgoodId(int goodId) {
+		this.goodId = goodId;
 	}
 
 	@Override
 	public String toString() {
 		return "Criteria [pageNum=" + pageNum + ", amount=" + amount + ", type=" + type + ", keyword=" + keyword
-				+ ", authorArr=" + Arrays.toString(authorArr) + ", searchCateCode=" + searchCateCode + ", kjbId="
-				+ kjbId + ", contentId=" + contentId + ", cateCode=" + cateCode + ", bookId="
-				+ bookId + ", memberId=" + memberId + ", memberAddr2=" + memberAddr2 + "]";
+				+ ", searchCateCode=" + searchCateCode + ", kjbId=" + kjbId + ", contentId=" + contentId + ", cateCode="
+				+ cateCode + ", goodId=" + goodId + ", memberMail=" + memberMail + ", memberAddr2=" + memberAddr2 + "]";
 	}
 
+	
 
 	
-	
-	/*
-		@Override
-		public String toString() {
-			return "Criteria [pageNum=" + pageNum + ", amount=" + amount + ", type=" + type + ", keyword=" + keyword
-					+ ", authorArr=" + Arrays.toString(authorArr) + ", kjbId="+ kjbId +", searchCateCode="+searchCateCode+",  cateCode=" + cateCode + ", bookId=" + bookId + "]";
-		}*/
 
-
-
-	
 	
 }

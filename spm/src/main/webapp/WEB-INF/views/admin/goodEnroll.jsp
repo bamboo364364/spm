@@ -5,55 +5,74 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>goodsEnroll</title>
+<title>goodEnroll</title>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
 	
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-
+<style>#sideNavLi2{background-color: gray;}
+</style>
 </head>
 <body>
-	<p>상품등록 페이지입니다</p>
+	<p>상품등록페이지입니다</p>
 
 	<%@include file="../includes/adminHeader.jsp" %>
 	<div id="center" style="text-align: center">
-	<form id="goodsEnrollForm" action="/admin/goodsEnroll" method="post">
+	<form id="goodEnrollForm" action="/admin/goodEnroll" method="post">
 		<input id="goodName" name="goodName" type="text" placeholder="상품명" />
-		<p id="goodNameWarn"></p>
+		<p class="goodNameWarn"></p>
 		<p>대분류</p><select id="cate1"><option selected value="none">선택</option></select>
 		<p>중분류</p><select id="cate2"><option selected value="none">선택</option></select>
 		<p>소분류</p><select id="cate3" name="cateCode"><option selected value="none">선택</option></select>
-		<p id="cateCodeWarn"></p><br />
+		<p class="cateCodeWarn"></p><br />
 		<input id="goodPrice" name="goodPrice" type="text" placeholder="가격" />
-		<p id="goodPriceWarn"></p>
-		<input id="goodStock" name="goodStock" type="text" placeholder="재고" />
-		<p id="goodStockWarn"></p>
+		<p class="goodPriceWarn"></p>
 		<input id="goodDiscountShow" type="text" placeholder="할인율" />
 		<input id="goodDiscountSend" name="goodDiscount" type="hidden"/>
-		<p id="goodDiscountInfo"></p>
-		<p id="goodDiscountWarn"></p>
+		<p class="goodDiscountInfo"></p>
+		<p class="goodDiscountWarn"></p>
+		<input id="goodStock" name="goodStock" type="text" placeholder="재고" />
+		<p class="goodStockWarn"></p>
 		<input id="goodMaker" name="goodMaker" type="text" placeholder="메이커"/> 
-		<p id="goodMakerWarn"></p><br />
+		<p class="goodMakerWarn"></p><br />
 		<label>상세정보</label>
 		<div id="goodContentsDiv">
 		<textarea name="goodContents" id="goodContents"></textarea>
-		<p id="goodContentsWarn"></p>
+		<p class="goodContentsWarn"></p>
 		</div>
-		
 		<label>상품 이미지</label>
-		<input type="file" id ="fileItem" name='uploadFile'><br /><br />
-          <button type="button" id="enrollBtn">등록</button>  
-          </div>  			
-	</form>
+		<input type="file" id ="fileItem" name='uploadFile'>
+		<div id='uploadResult'></div><br /><br />
+         <button type="button" id="enrollBtn">등록</button>  
+         </form>
+         </div>  			
+	
 	
 
 	
-</div>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/26.0.0/classic/ckeditor.js"></script>
+
+<!-- <script src="https://cdn.ckeditor.com/ckeditor5/26.0.0/classic/ckeditor.js"></script>
+ -->
+
+<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+
+
+
 <script>
+
+
+ClassicEditor.create( document.querySelector( '#goodContents' ),{language: 'ko'} ).then
+(function(contents){
+	theEditor= contents;
+}).catch(function(error){
+	console.error(error);
+});
+
+   
+
 
 var goodNameCheck= false;
 var cateCodeCheck= false;
@@ -64,80 +83,146 @@ var goodMakerCheck= false;
 var goodContentsCheck= false;
 
 
-/* 위지윅 적용 */
- 
-	/* 상세정보 */
-	ClassicEditor
-		.create(document.querySelector('#goodContents'))
-		.catch(function(error){
-			console.error(error);
-		});
-		
-		$("#enrollBtn").on("click", function(){
-			if($("#goodName").val()){
-				$("#goodNameWarn").html("");
-				goodNameCheck= true;
-			}else{
-				$("#goodNameWarn").html("상품명을 입력해주세요");
-				goodNameCheck= false;
-			}
-			
-			if($("#cate3").val()!='none'){
-				$("#cateCodeWarn").html("");
-				cateCodeCheck= true;
-			}else{
-				$("#cateCodeWarn").html("카테고리선택해주세요");
-				cateCodeCheck= false;
-			}
-			
-			if($("#goodPrice").val()){
-				$("#goodPriceWarn").html("");
-				goodPriceCheck= true;
-			}else{
-				$("#goodPriceWarn").html("상품가격을 입력해주세요");
-				goodPriceCheck= false;
-			}
-			
-			if($("#goodStock").val()){
-				$("#goodStockWarn").html("");
-				goodStockCheck= true;
-			}else{
-				$("#goodStockWarn").html("상품재고를 입력해주세요");
-				goodStockCheck= false;
-			}
-			
-			if($("#goodDiscountSend").val()){
-				$("#goodDiscountWarn").html("");
-				goodDiscountCheck= true;
-			}else{
-				$("#goodDiscountWarn").html("상품할인율을 입력해주세요");
-				goodDiscountCheck= false;
-			}
-			
-			if($("#goodMaker").val()){
-				$("#goodMakerWarn").html("");
-				goodMakerCheck= true;
-			}else{
-				$("#goodMakerWarn").html("메이커명을 입력해주세요");
-				goodMakerCheck= false;
-			}
-			
-			if($("#goodContentsDiv").html()!= '<br data-cke-filler="true">'){
-				$("#goodContentsWarn").html("");
-				goodContentsCheck= true;
-			}else{
-				$("#goodContentsWarn").html("상세정보를 입력해주세요");
-				goodContentsCheck= false;
-			}
-			
-			if(goodNameCheck&&cateCodeCheck&&goodPriceCheck&&goodStockCheck&&goodDiscountCheck&&goodMakerCheck&&goodContentsCheck){
-				$("#enrolllForm").submit();
-			}else{
-				return false;
-			}
-		});//enrlbtn
+
 		
 		
+		
+
+	$(document).on('ready', function(){
+		
+		$('.goodNameWarn').css('color','red');
+		$('.goodNameWarn').html('상품명을 입력해주세요');
+		$('.cateCodeWarn').css('color','red');
+		$('.cateCodeWarn').html('카테고리를 입력해주세요');
+		$('.goodPriceWarn').css('color','red');
+		$('.goodPriceWarn').html('상품가격을 입력해주세요');
+		$('.goodDiscountWarn').css('color','red');
+		$('.goodDiscountWarn').html('할인율을 입력해주세요');
+		$('.goodStockWarn').css('color','red');
+		$('.goodStockWarn').html('상품재고를 입력해주세요');
+		$('.goodMakerWarn').css('color','red');
+		$('.goodMakerWarn').html('메이커명을 입력해주세요');
+		$('.goodContentsWarn').css('color','red');
+		$('.goodContentsWarn').html('상세정보를 입력해주세요');
+		
+		
+		
+	});
+	
+	$('#goodName').on("propertychange change keyup paste input", function(){
+		if($(this).val()){
+			$('.goodNameWarn').css('color','green');
+			$('.goodNameWarn').html('상품명 확인');
+			goodNameCheck= true;
+		}else{
+			$('.goodNameWarn').css('color','red');
+			$('.goodNameWarn').html('상품명을 입력해주세요');
+			goodNameCheck= false;
+		}
+			});//propertyChange
+			
+	$('#cate3').on("change", function(){
+		if( $(this).val()!= 'none'){
+			$('.cateCodeWarn').css('color','green');
+			$('.cateCodeWarn').html('카테고리 확인');
+			cateCodeCheck= true;
+		}else{
+			$('.cateCodeWarn').css('color','red');
+			$('.cateCodeWarn').html('카테고리를 입력해주세요');
+			cateCodeCheck= false;
+		}
+			});//propertyChange
+			
+	$('#goodPrice').on("propertychange change keyup paste input", function(){
+		if( !isNaN( $(this).val() )&& $(this).val() ){
+			$('.goodPriceWarn').css('color','green');
+			$('.goodPriceWarn').html('상품가격 확인');
+			goodPriceCheck= true;
+		}else{
+			$('.goodPriceWarn').css('color','red');
+			$('.goodPriceWarn').html('숫자를 입력해주세요');
+			goodPriceCheck= false;
+		}
+			});//propertyChange		
+			
+	
+	/* 할인율 Input 설정 */
+	
+	$("#goodDiscountShow, #goodPrice").on("propertychange change keyup paste input", function(){
+		console.log("할인율작동");
+		let goodDiscountShow= $("#goodDiscountShow");
+		let goodDiscountSend= $("#goodDiscountSend");
+		let goodDiscountWarn = $(".goodDiscountWarn");
+		
+		
+		let discountRate = goodDiscountShow.val();	// 사용자가 입력한 할인값
+		let sendDiscountRate = discountRate / 100;	//서버전송할할인값
+		let goodsPrice = $("#goodPrice").val();		// 원가
+		let discountPrice = goodsPrice * (1 - sendDiscountRate);   // 할인가격
+		
+		if(!isNaN(discountRate)&& discountRate){
+			goodDiscountWarn.css('color','green');	
+			goodDiscountWarn.html(`할인가격:`+ discountPrice);		
+			goodDiscountSend.val(sendDiscountRate);
+			goodDiscountCheck= true;
+		}else{
+			goodDiscountWarn.css('color','red');
+			goodDiscountWarn.html(`숫자를입력해주세요`);
+			goodDiscountSend.val('');
+			goodDiscountCheck= false;
+		}
+	
+	});	//propertyChange
+	
+	$('#goodStock').on("propertychange change keyup paste input", function(){
+		if( !isNaN( $(this).val() )&& $(this).val() ){
+			$('.goodStockWarn').css('color','green');
+			$('.goodStockWarn').html('상품재고 확인');
+			goodStockCheck= true;
+		}else{
+			$('.goodStockWarn').css('color','red');
+			$('.goodStockWarn').html('숫자를 입력해주세요');
+			goodStockCheck= false;
+		}
+			});//propertyChange	
+			
+	$('#goodMaker').on("propertychange change keyup paste input", function(){
+		if( $(this).val() ){
+			$('.goodMakerWarn').css('color','green');
+			$('.goodMakerWarn').html('메이커명 확인');
+			goodMakerCheck= true;
+		}else{
+			$('.goodMakerWarn').css('color','red');
+			$('.goodMakerWarn').html('메이커명을 입력해주세요');
+			goodMakerCheck= false;
+		}
+			});//propertyChange
+			
+	$("#goodContentsDiv").on("propertychange change keyup paste input", function(){
+		
+		if( theEditor.getData()){
+			$('.goodContentsWarn').css('color','green');
+			$('.goodContentsWarn').html('상세정보 확인');
+			goodContentsCheck= true;
+		}else{
+			$('.goodContentsWarn').css('color','red');
+			$('.goodContentsWarn').html('상세정보를 입력해주세요');
+			goodContentsCheck= false;
+		}
+			});//propertyChange	
+			
+	$('#enrollBtn').on('click', function(){
+		if(goodNameCheck&&cateCodeCheck&&goodPriceCheck&&goodDiscountCheck&&
+				goodPriceCheck&&goodMakerCheck&&goodContentsCheck){
+			$('#goodEnrollForm').submit();
+		}else{
+			alert('다시 입력해주세요');
+		}
+	});		
+			
+		
+		
+
 		
 	/* 카테고리 */
 	let cateList = JSON.parse('${cateList}');
@@ -167,7 +252,7 @@ var goodContentsCheck= false;
 				
 			}
 		}
-	}//fncmkctarr	
+	}//makeCateArray
 	
 	/* 배열 초기화 */
 	makeCateArray(cate1Obj,cate1Array,cateList,1);
@@ -197,7 +282,7 @@ var goodContentsCheck= false;
 			}
 		}// for
 		
-	});//cs1
+	});//cateSelect1
 	
 	/* 소분류 <option>태그 */
 	$(cateSelect2).on("change",function(){
@@ -214,37 +299,16 @@ var goodContentsCheck= false;
 			}
 		}// for		
 		
-	});	//cs2
+	});	//cateSelect2
 	
 	
-	/* 할인율 Input 설정 */
 	
-	$("#goodDiscountShow").on("propertychange change keyup paste input", function(){
-		console.log("할인율작동");
-		let goodDiscountShow= $("#goodDiscountShow");
-		let goodDiscountSend= $("#goodDiscountSend");
-		let goodDiscountInfo = $("#goodDiscountInfo");
-		
-		
-		let discountRate = goodDiscountShow.val();					// 사용자가 입력한 할인값
-		let sendDiscountRate = discountRate / 100;			//서버전송할할인값
-		let goodsPrice = $("#goodPrice").val();			// 원가
-		let discountPrice = goodsPrice * (1 - sendDiscountRate);		// 할인가격
-		
-		if(!isNaN(discountRate)){
-			goodDiscountInfo.html(`할인가격:`+ discountPrice);		
-			goodDiscountSend.val(sendDiscountRate);				
-		}else{
-			goodDiscountInfo.html(`숫자를입력해주세요`);
-			goodDiscountSend.val('');
-		}
-	
-	});	//diCPRCF
 	
 	
 	
 	/* 이미지 업로드 */
-	$("input[type='file']").on("change", function(e){
+	$("#fileItem").on("change", function(e){
+		/* console.log($(this)[0].files[0]); */
 		
 		/* 이미지 존재시 삭제 */
 		if($(".imgDeleteBtn").length > 0){
@@ -252,8 +316,8 @@ var goodContentsCheck= false;
 		}
 		
 		let formData = new FormData();
-		let fileInput = $('input[name="uploadFile"]');
-		let fileList = fileInput[0].files;
+		let fileItem = $('#fileItem');
+		let fileList = fileItem[0].files;
 		let fileObj = fileList[0];
 		
 		if(!fileCheck(fileObj.name, fileObj.size)){
@@ -279,10 +343,11 @@ var goodContentsCheck= false;
 		});		
 
 		
-	});
+	}); //imgUpload
+	
 		
 	/* var, method related with attachFile */
-	let regex = new RegExp("(.*?)\.(jpg|png)$");
+	let regex = new RegExp("(.*?)\.(jpg|png|jpeg)$");
 	let maxSize = 1048576; //1MB	
 	
 	function fileCheck(fileName, fileSize){

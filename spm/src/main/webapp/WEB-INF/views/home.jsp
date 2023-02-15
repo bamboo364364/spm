@@ -34,15 +34,37 @@ h1, #upNav {
 		</c:if>
 		<c:if test="${member!=null}">
 			<c:if test="${member.adminCk==1}">
-			<a href="/admin/main">관리자페이지</a> 
+			<a href="/admin/goodManage">관리자페이지</a> 
 			</c:if>
 			<a id="logout">로그아웃</a> <a href="/member/admin/myroom/${member.memberMail}">마이룸</a>
 			<a href="/cart/${member.memberMail}">장바구니</a><br />
+			<span style='color:red;' >${member.memberName}</span>
 			<span>충전금액<fmt:formatNumber value="${member.money}" pattern="\#,###.##"/></span>
 			<span>포인트<fmt:formatNumber value="${member.point}" pattern="\#,###.##"/></span>
 			
 		</c:if>
 	</div>
+	
+	
+	<!-- 검색 영역 -->
+  
+  		<form id="searchForm" action='/search' method='get'>
+  			<div id='searchDiv'>
+  				<select name="type" id="type">
+  				<option value="D">등록일자순</option>
+  				<option value="C">카테고리정렬</option>
+  				<option value="P">가격순</option>
+  				<option value="S">재고순</option>
+  				</select>
+      			<input type="text" name="keyword" value=''>
+      			<input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
+      			<input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
+      			<button class='btn search_btn'>검 색</button>                				
+  			</div>
+  		</form>
+	
+	
+	
 	
 	<script>
 	

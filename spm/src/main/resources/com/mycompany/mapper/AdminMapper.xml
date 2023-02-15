@@ -10,6 +10,122 @@
 		select * from spm_cate order by cateCode
 
 	</select>
+	
+	<!-- 어제자 날자 이미지 리스트 -->
+	<select id="checkFileList"
+		resultType="com.mycompany.model.AttachImageVO">
+
+		select * from spm_image where uploadpath = to_char(sysdate -1, 'yyyy\mm\dd')
+
+	</select>
+	
+	<!-- 상품 등록 -->
+	<insert id="goodEnroll">
+		<selectKey resultType="int" keyProperty="goodId"
+			order="AFTER">
+			SELECT max(goodId)from spm_good
+
+		</selectKey>
+
+		insert into spm_good(goodName,cateCode, goodPrice, goodStock,
+		goodDiscount, goodContents, regDate)
+		values(#{goodName},#{cateCode},#{goodPrice},#{goodStock},#{goodDiscount},#{goodContents}, sysdate)
+
+	</insert>
+	
+	<!-- 상품 리스트 -->
+	<select id="goodGetList" resultType="com.mycompany.model.GoodVO">
+  	
+  		select* from(select rownum rn, a.* from(select goodId, goodName, goodPrice,(select cateName from spm_cate where spm_good.cateCode = spm_cate.cateCode) cateName
+		,goodStock, regDate, cateCode from spm_good
+		<if test="keyword != null">
+		where goodName like '%' || #{keyword} || '%'
+		</if>
+		order by
+		<choose>
+		<when test="type=='D'.toString()">
+		 goodId desc
+		</when>
+		<when test="type=='C'.toString()">
+		 cateCode desc
+		</when>
+		<when test="type=='P'.toString()">
+		 goodPrice desc
+		</when>
+		<when test="type=='S'.toString()">
+		 goodStock desc
+		</when>
+		<otherwise>
+		goodId desc
+		</otherwise>
+		</choose> <![CDATA[
+		)a where rownum <= #{pageNum}*#{amount}) where rn  > (#{pageNum}-1)*#{amount} ]]>
+
+	</select>
+
+	<!-- 상품 총 개수 -->
+	<select id="goodGetTotal" resultType="int">
+
+		select count(*) from spm_good
+
+		<if test="keyword != null">
+
+			where goodName like '%' || #{keyword} || '%'
+		</if>
+
+	</select>
+
+	<!-- 상품 조회 페이지 -->
+	<select id="goodGetDetail" resultType="com.mycompany.model.GoodVO">
+
+		select goodId, goodName, cateCode, goodPrice, goodStock, goodDiscount, goodMaker,
+		goodContents, regDate, modDate
+		from spm_good where goodId = #{goodId}
+
+	</select>
+
+	<!-- 상품 정보 수정 -->
+	<update id="goodModify">
+		update spm_good set goodName = #{goodName},
+		cateCode = ${cateCode}, goodPrice = #{goodPrice},
+		goodStock = #{goodStock}, goodDiscount = #{goodDiscount},
+		 goodContents = #{goodContents},
+		modDate = sysdate
+		where goodId = ${goodId}
+
+	</update>
+
+	<!-- 상품 정보 삭제 -->
+	<delete id="goodsDelete">
+
+		delete from spm_good where goodId = #{goodId}
+
+	</delete>
+	
+	<!-- 이미지 등록 -->
+	<insert id="imageEnroll">
+
+		insert into spm_image(goodId, fileName, uploadPath, uuid) values (#{goodId},
+		#{fileName}, #{uploadPath}, #{uuid})
+
+	</insert>
+	
+	<!-- 상품상세 이미지표시-->
+	<select id="getAttachInfo" resultType="com.mycompany.model.AttachImageVO">
+		select * from spm_image where goodId = #{goodId}
+	</select>
+	
+	<!-- 지정 상품 이미지 전체 삭제 -->
+	<delete id="deleteImageAll">
+
+		delete from spm_image where goodId = #{goodId}
+
+	</delete>
+	
+
+
+	
+	
 
 
 
