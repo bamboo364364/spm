@@ -172,7 +172,7 @@ $(".pageMaker_btn a").on("click", function(e){
 });//pageMaker
 
 
-/* 상품디테일페s이지 이동 */
+/* 상품디테일페이지 이동 */
 /* $('#goodListTable').find('a').on('click', function(e){
 	e.preventDefault();
 	
