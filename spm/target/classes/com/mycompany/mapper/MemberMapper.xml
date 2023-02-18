@@ -24,7 +24,17 @@
   	
   		select memberMail, memberPw, memberName, adminCk, money, point from spm_member where memberMail = #{memberMail}
   		
-  	</select>
+  		</select>
+  	<!-- 회원정보 -->	
+  	
+  	<select id="getMemberInfo" resultType="com.mycompany.model.MemberVO">
+  	
+  		select memberMail, memberName, memberMail, memberAddr1, memberAddr2, memberAddr3, money, point 
+  		from spm_member 
+  		where memberMail = #{memberMail}
+  	
+  	</select> 	
+  	
 
 
 

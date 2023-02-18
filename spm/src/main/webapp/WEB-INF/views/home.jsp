@@ -36,14 +36,16 @@ h1, #upNav {
 			<c:if test="${member.adminCk==1}">
 			<a href="/admin/goodManage">관리자페이지</a> 
 			</c:if>
-			<a id="logout">로그아웃</a> <a href="/member/admin/myroom/${member.memberMail}">마이룸</a>
-			<a href="/cart/${member.memberMail}">장바구니</a><br />
+			<a id="logout">로그아웃</a> <a href="/member/admin/myroom?memberMail=${member.memberMail}">마이룸</a>
+			<a href="/cart/cartView?memberMail=${member.memberMail}">카트</a><br />
 			<span style='color:red;' >${member.memberName}</span>
 			<span>충전금액<fmt:formatNumber value="${member.money}" pattern="\#,###.##"/></span>
 			<span>포인트<fmt:formatNumber value="${member.point}" pattern="\#,###.##"/></span>
 			
 		</c:if>
 	</div>
+	
+
 	
 	
 	<!-- 검색 영역 -->

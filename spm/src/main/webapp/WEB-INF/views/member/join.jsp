@@ -45,7 +45,7 @@
 			<br />
 
 			<div>
-				<input type="text" id="memberName" name="memberName" placeholder="닉네임" />
+				<input type="text" id="memberName" name="memberName" placeholder="이름" />
 				<br /> <div class="memberNameWarn"></div>
 
 			</div>
@@ -108,7 +108,7 @@
 				$('.memberPwCkWarn').html('비밀번호확인을 입력해주세요');
 				
 				$('.memberNameWarn').css('color','red');
-				$('.memberNameWarn').html('닉네임을 입력해주세요');
+				$('.memberNameWarn').html('이름을 입력해주세요');
 				
 				$('.memberAddr3Warn').css('color','red');
 				$('.memberAddr3Warn').html('주소를 입력해주세요');
@@ -139,11 +139,11 @@
 				$('#memberName').on("propertychange change keyup paste input",function(){
 						if($('#memberName').val()) {
 							$('.memberNameWarn').css('color', 'green');
-							$('.memberNameWarn').html('닉네임 입력확인');
+							$('.memberNameWarn').html('이름 입력확인');
 							memberNameCheck = true;
 						}else{
 							$('.memberNameWarn').css('color','red');
-							$('.memberNameWarn').html('닉네임을 입력해주세요');
+							$('.memberNameWarn').html('이름을 입력해주세요');
 							memberNameCheck = false;
 						}
 						});//propertyChange

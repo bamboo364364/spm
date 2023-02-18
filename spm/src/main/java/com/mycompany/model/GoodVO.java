@@ -38,6 +38,17 @@ public class GoodVO {
 	/* 상품 메이커 */
 	private String goodMaker;
 	
+	/* (주문용) 주문상품수 */
+	private int goodCount;
+	
+	public int getGoodCount() {
+		return goodCount;
+	}
+
+	public void setGoodCount(int goodCount) {
+		this.goodCount = goodCount;
+	}
+
 	/* 평점평균 */
 	private double ratingAvg;
 	
@@ -58,7 +69,8 @@ public class GoodVO {
 		return "GoodVO [goodId=" + goodId + ", goodName=" + goodName + ", cateCode=" + cateCode + ", cateName="
 				+ cateName + ", goodPrice=" + goodPrice + ", goodStock=" + goodStock + ", goodDiscount=" + goodDiscount
 				+ ", goodContents=" + goodContents + ", regDate=" + regDate + ", modDate=" + modDate + ", goodMaker="
-				+ goodMaker + ", ratingAvg=" + ratingAvg + ", imageList=" + imageList + "]";
+				+ goodMaker + ", goodCount=" + goodCount + ", ratingAvg=" + ratingAvg + ", imageList=" + imageList
+				+ "]";
 	}
 
 	public void setGoodMaker(String goodMaker) {

@@ -51,7 +51,7 @@
 	sessionStorage.setItem('memberMail', '${member.memberMail}');
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
 	
-	$(document).on(function(){
+	$(document).ready(function(){
 		alert(sessionMemberMail);
 	});
 	
@@ -59,11 +59,11 @@
 		alert('투고');
 		
 		let form={
-			memberMail= sessionMemberMail,
-			goodId= ${dto.goodId},
-			relevel= ${dto.relevel},
-			rating= $('#rating').val(),
-			replyContent= $('#replyContent').val()
+			memberMail: sessionMemberMail,
+			goodId: ${dto.goodId},
+			relevel: ${dto.relevel},
+			rating: $('#rating').val(),
+			replyContent: $('#replyContent').val()
 		}
 		
 		$.ajax({
@@ -77,7 +77,14 @@
 					
 					alert("완료");
 					$(opener.location).attr("href", "javascript:replyHtmlInit();");	
-				window.close();
+				
+					/* window.close(); */
+			
+ let close=   function(){
+       window.open('', '_self').close();
+       return false;
+    }
+				 close();
 				},	
 				error : function(x, e) {
 					if (x.status == 0) {
@@ -96,7 +103,7 @@
 				}
 			}); //ajax
 
-	});//replyEnrollBtn 
+	}); 
 	
 	</script>
 	

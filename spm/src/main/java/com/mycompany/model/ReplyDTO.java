@@ -19,11 +19,21 @@ public class ReplyDTO {
 	
 	private double rating;
 	
-	
 	private int relevel;
+	
+	//삭제시사용, 선택 replyId다음 동 레벨리플의 replyId
+	private int ntReplyId;
 
 
 
+
+	public int getNtReplyId() {
+		return ntReplyId;
+	}
+
+	public void setNtReplyId(int ntReplyId) {
+		this.ntReplyId = ntReplyId;
+	}
 
 	public int getRelevel() {
 		return relevel;
@@ -83,8 +93,9 @@ public class ReplyDTO {
 
 	@Override
 	public String toString() {
-		return "ReplyDTO [replyId=" + replyId + ", goodId=" + goodId + ", memberMail=" + memberMail + ", regDate=" + regDate
-				+ ", replyContent=" + replyContent + ", rating=" + rating + ",  relevel=" + relevel + "]";
+		return "ReplyDTO [replyId=" + replyId + ", goodId=" + goodId + ", memberMail=" + memberMail + ", regDate="
+				+ regDate + ", replyContent=" + replyContent + ", rating=" + rating + ", relevel=" + relevel
+				+ ", ntReplyId=" + ntReplyId + "]";
 	}	
 	
 	

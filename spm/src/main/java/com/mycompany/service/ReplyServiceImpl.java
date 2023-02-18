@@ -45,6 +45,38 @@ private ReplyMapper replyMapper;
 	
 	};
 
+/* 리플삭제 */
+@Override
+	public void replyDelete(ReplyDTO dto){
+	
+	replyMapper.replyDelete(dto);
+	
+	}
+	
+	
+	/* 리리플 등록 */
+	@Override
+	public void rReplyEnroll(ReplyDTO dto){
+	replyMapper.rReplyEnroll(dto);
+	}
+	
+	/* 리리플뒤에있는 replyId 밀어주기 */
+	@Override
+	public void pushReplyId(int replyId){
+	replyMapper.pushReplyId(replyId);
+	}
+	
+
+
+	/* 리플수(페이지계산) */
+	@Override
+	public int replyGetTotal(int goodId){
+	return replyMapper.replyGetTotal(goodId);
+	}
+
+
+
+
 
 
 

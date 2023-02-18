@@ -29,5 +29,28 @@ public class MemberServiceImpl implements MemberService {
 	public MemberVO memberLogin(MemberVO vo){
 	return memberMapper.memberLogin(vo);
 	};
+	
+	/*회원정보*/
+	@Override
+	public MemberVO getMemberInfo(String memberMail){
+	return memberMapper.getMemberInfo(memberMail);
+	};
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-}// clss
+}// class

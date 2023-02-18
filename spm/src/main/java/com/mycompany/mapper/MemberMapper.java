@@ -12,7 +12,10 @@ public interface MemberMapper {
 	
 	//로그인작동
 	public MemberVO memberLogin(MemberVO vo);
-
+	
+	/*회원정보*/
+	public MemberVO getMemberInfo(String memberMail);
 	
 	
-}//cls
+	
+}//class

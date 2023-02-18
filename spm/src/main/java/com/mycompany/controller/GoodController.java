@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mycompany.model.AttachImageVO;
 import com.mycompany.model.Criteria;
@@ -28,6 +28,7 @@ import com.mycompany.model.PageDTO;
 import com.mycompany.service.AdminService;
 import com.mycompany.service.AttachService;
 import com.mycompany.service.MemberService;
+import com.mycompany.service.ReplyService;
 
 @Controller
 public class GoodController {
@@ -40,6 +41,9 @@ public class GoodController {
 	private AttachService attachService;
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private ReplyService replyService;
+	
 
 	/* 이미지 출력 */
 	@GetMapping("/display")
@@ -100,19 +104,31 @@ public class GoodController {
 	
 	
 	@GetMapping("/goodDetail/{goodId}")
-	public String goodDetailGet(@PathVariable("goodId") int goodId, Model model){
+	public String goodDetailGet(@PathVariable("goodId") int goodId, Criteria cri, Model model){
 	logger.info("상품상세 페이지 진입");
 	
 	
 	GoodVO good= adminService.goodGetDetail(goodId);
 	
 	model.addAttribute("good", good);
+	
+	model.addAttribute("pageMaker", new PageDTO(cri, replyService.replyGetTotal(goodId)));
+	
 	return "/goodDetail";	
 	
 	
 	}//goodDetail
 	
 	
+	
+	
+	
+
+
+
+
+
+
 
 
 

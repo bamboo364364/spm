@@ -19,7 +19,7 @@ public class CartInterceptor implements HandlerInterceptor{
 		MemberVO mvo = (MemberVO)session.getAttribute("member");
 		
 		if(mvo == null) {
-			response.sendRedirect("/main");
+			response.sendRedirect("/");
 			return false;
 		} else {
 			return true;

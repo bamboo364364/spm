@@ -8,9 +8,9 @@
 	<!-- 리플페이징 -->
 	<select id="replyList" resultType="com.mycompany.model.ReplyDTO">
 	select* from(
-	 select rownum rn, replyId, goodId, memberMail, regDate, replyContent, rating, relevel 
+	 select rownum rn, a.* from(select replyId, goodId, memberMail, regDate, replyContent, rating, relevel 
 	 from spm_reply
-	 where goodId= #{goodId} and rownum
+	 where goodId= #{goodId} order by replyId desc)a where rownum
 	 <![CDATA[ <= ]]>  #{pageNum}*#{amount} ) where rn  <![CDATA[ >  ]]>
 	 (#{pageNum}-1)*#{amount}  
 	</select>
@@ -18,10 +18,11 @@
 	<!-- 리플등록 -->
 	<insert id="replyEnroll">
 	insert into spm_reply(replyId, goodId,
-	memberMail, regDate, replyContent, rating, relevel)
+	memberMail, regDate, replyContent, rating, relevel, seq)
 	values(spm_reply_seq.nextval, #{goodId}, #{memberMail}, sysdate, #{replyContent},
-	#{rating}, #{relevel})
+	#{rating}, #{relevel}, spm_reply_seq.currval)
 	</insert>
+	
 	
 	<!-- 리플수정 -->
 	<update id="replyModify">
@@ -29,6 +30,41 @@
     replyContent= #{replyContent}, rating= #{rating}
      where replyId= #{replyId}
 	</update>
+	
+	<!-- 리플삭제 -->
+	<delete id="replyDelete">
+	delete spm_reply where replyId <![CDATA[ <= ]]> #{replyId}
+	and replyId <![CDATA[ > ]]> #{ntReplyId}
+	</delete>
+	
+	<!-- 리리플등록 -->
+	<insert id="rReplyEnroll">
+	insert into spm_reply(replyId, goodId, memberMail, regDate, replyContent,
+	relevel, seq)
+	values(#{replyId}, #{goodId}, #{memberMail}, sysdate, #{replyContent}, #{relevel},
+	spm_reply_seq.nextval)
+	</insert>
+	
+	<!-- 리리플뒤에있는 replyId 밀어주기 -->
+	<update id="pushReplyId">
+	update spm_reply set
+    replyId= replyId+ 1 where replyId>= #{replyId}
+	</update>
+	
+
+	<!-- 리플수(페이지계산) -->
+	<select id="replyGetTotal" resultType="int">
+	select count(*) from spm_reply where goodId= #{goodId}
+	
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

@@ -56,6 +56,7 @@ public class ReplyController {
 	@PostMapping("/replyEnroll")
 	@ResponseBody
 	public void replyEnrollPost(@RequestBody ReplyDTO dto){
+	logger.info(dto.toString());
 	replyService.replyEnroll(dto);
 
 	}
@@ -78,9 +79,42 @@ public class ReplyController {
 	@PostMapping("/replyModify")
 	@ResponseBody
 	public void replyModify(@RequestBody ReplyDTO dto){
-
+	logger.info(dto.toString());
 	replyService.replyModify(dto);
 	}
+	
+	/* 리플삭제 */
+	@PostMapping("/replyDelete")
+	@ResponseBody
+	public void replyDelete(@RequestBody ReplyDTO dto){
+	logger.info(dto.toString());
+		replyService.replyDelete(dto);
+	}
+	
+	
+	/* 리리플팝업페이지 */
+	@GetMapping("/rReplyWrite/{goodId}")
+	public String rReplyWriteGet(@PathVariable("goodId") int goodId, int rReplyId, int rRelevel, Model model){
+	
+	ReplyDTO dto= new ReplyDTO();
+	dto.setReplyId(rReplyId);
+	dto.setRelevel(rRelevel);
+	dto.setGoodId(goodId);
+	model.addAttribute("dto", dto);
+	return "/rReplyWrite";
+	}
+	
+	/* 리리플등록 */
+	@PostMapping("/rReplyEnroll")
+	@ResponseBody
+	public void rReplyEnrollPost(@RequestBody ReplyDTO dto){
+	logger.info("리리플등록");
+	logger.info("정보"+dto.toString());
+	replyService.pushReplyId(dto.getReplyId());
+	replyService.rReplyEnroll(dto);
+	}
+	
+	
 	
 	
 	

@@ -34,8 +34,8 @@ h1, #upNav {display: inline;}
 			<c:if test="${member.adminCk==1}">
 			<a href="/admin/goodManage">관리자페이지</a> 
 			</c:if>
-			<a id="logout">로그아웃</a> <a href="/member/admin/myroom/${member.memberMail}">마이룸</a>
-			<a href="/cart/${member.memberMail}">장바구니</a><br />
+			<a id="logout">로그아웃</a> <a href="/member/admin/myroom?memberMail=${member.memberMail}">마이룸</a>
+			<a href="/cart/cartView?memberMail=${member.memberMail}">카트</a><br />
 			<span style='color:red;' >${member.memberName}</span>
 			<span>충전금액<fmt:formatNumber value="${member.money}" pattern="\#,###.##"/></span>
 			<span>포인트<fmt:formatNumber value="${member.point}" pattern="\#,###.##"/></span>
@@ -75,9 +75,31 @@ h1, #upNav {display: inline;}
 	<div class="red">${good.goodStock}</div><br />
 	</div>
 	<div id='box3'>
-	<button id='cateBtn'>장바구니에 담기</button> <br /><br />
+	주문수량
+	<input type="text" id="quantityInput" value="1">
+		<button id="plusBtn">+</button>
+		<button id="minusBtn">-</button><br /><br />
+	<button id='cartBtn'>카트에 담기</button> <br /><br />
 	<button id='buyBtn'>바로 구매</button>
 	</div>
+	
+	<script>
+	var quantity= $('#quantityInput').val() ;
+	$('#plusBtn').click(function(){
+		
+		$('#quantityInput').val(++quantity)
+		});
+		
+		
+		$("#minusBtn").click(function(){
+	if(quantity > 1){
+		$("#quantityInput").val(--quantity);	
+		}
+	});
+	</script>
+	
+	
+	
 
 	
 	
@@ -95,10 +117,69 @@ h1, #upNav {display: inline;}
 	<div id='replyDiv'>
 	</div>
 	
+	
+
+	
+<!--리플 페이지 이동 인터페이스 -->
+				<div class="pageMakeWrap">
+					<ul class="pageMaker">
+
+						<!-- 이전 버튼 -->
+						<c:if test="${pageMaker.prev }">
+							<li class="pageMakerBtn prev"><a
+								href="${pageMaker.pageStart -1}">이전</a></li>
+						</c:if>
+
+						<!-- 페이지 번호 -->
+						<c:forEach begin="${pageMaker.pageStart }"
+							end="${pageMaker.pageEnd }" var="num">
+							<li
+								class="pageMakerBtn ${pageMaker.cri.pageNum == num ? 'active':''}">
+								<a href="${num}">${num}</a>
+							</li>
+						</c:forEach>
+
+						<!-- 다음 버튼 -->
+						<c:if test="${pageMaker.next}">
+							<li class="pageMakerBtn next"><a
+								href="${pageMaker.pageEnd + 1 }">다음</a></li>
+						</c:if>
+					</ul>
+				</div>
+				
+				
+				
+	
 
 	<script>
 	sessionStorage.setItem('memberMail', '${member.memberMail}');
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
+	
+	
+		/*리플 페이지 이동 버튼 */
+ $(document).on('click','.pageMakerBtn a', function(e){
+	
+	e.preventDefault();
+	
+	
+	replyHtmlInit($(this).attr("href"), ${pageMaker.cri.amount});
+	
+
+	
+	
+	
+/* 	$('#moveForm').submit(); */
+ 
+/* 	replyHtmlInit(); */
+
+	
+});//pageMaker
+	
+	
+	
+	
+	
+	
 	
 		/* 이미지 삽입 */
 	var imageWrap = $(".imageWrap");
@@ -117,13 +198,15 @@ h1, #upNav {display: inline;}
 	
 	
 	
+	
 	/* 페이지리로드리플보여주기 */
-	$(document).ready(function(){
+	$(document).on('ready',function(){
 
 		replyHtmlInit();
-		
+	
 	});
 	
+
 	
 	
 	$('#replyBtn').on('click', function(){
@@ -136,10 +219,12 @@ h1, #upNav {display: inline;}
 	
 
 	/* 리플생성지시함수 */
-var replyHtmlInit= function(){
+var replyHtmlInit= function(pageNum, amount){
 		
 		let form={
-			goodId: ${goodId}	
+			goodId: ${goodId},
+			pageNum: pageNum,
+			amount: amount
 		}
 		
 		$.ajax({
@@ -150,7 +235,7 @@ var replyHtmlInit= function(){
 				contentType : "application/json;charset=UTF-8",
 				dataType : 'json',
 				success : function(result) {
-					replyHtmlMake(result);
+					replyHtmlMake(result); 
 					alert("완료 replyHtmlInit");
 						
 				
@@ -182,13 +267,14 @@ var replyHtmlInit= function(){
 		$.each(result, function(i, obj){
 		
 			html+= `<div id='reply' style='border: 1px solid black;'
-			relevel= '`+obj.relevel+`' memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>                                 
+			class='`+obj.relevel+`' relevel= '`+obj.relevel+`' memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>                                 
 			리플번호: '`+obj.replyId+`'<br />
 			작성자: '`+obj.memberMail+`' <br />
 			작성일: '`+obj.regDate+`' <br />
 			평점: '`+obj.rating+`' <br />
+			리레벨: '`+obj.relevel+`'<br />
 			`+obj.replyContent+`<br />
-			<button id='modBtn'>수정</button><button id='delBtn'>삭제</button> 
+			<button id='modBtn'>수정</button><button id='delBtn'>삭제</button> <button id='repBtn'>댓글달기</button>
 			</div> `
 	
 		});//each
@@ -211,18 +297,171 @@ var replyHtmlInit= function(){
  	window.open(url, "replyModify","width = 500, height = 500, top = 100, left = 200, location = no");
 				}else{alert('작성자가 아닙니다');}
 		
+
+	});//modBtn
+	
+	
+	/* 리플삭제 */
+	
+	$(document).on('click','#delBtn', function(e){
+		
+		let replyId= $(this).parent().attr('replyId');
+		let tRelevel= $(this).parent().attr('class');
+		let ntReplyId= $( `.`+tRelevel ).eq( $( `.`+tRelevel ).index( $(this).parent() )+ 1  ).attr('replyId');
+		let form= {
+				replyId: replyId,
+				ntReplyId: ntReplyId			
+		}
+		
+		if( $(this).parent().attr('memberMail')== sessionMemberMail ){
+		$.ajax({
+				url : '/replyDelete',
+				type : 'post',
+				async : false,
+				data : JSON.stringify(form),
+				contentType : "application/json;charset=UTF-8",
+				dataType : 'json',
+				success : function() {
+					alert('replyDeleteBtnSuc');
+					replyHtmlInit();
+			
+				
+				},	
+				error : function(x, e) {
+					if (x.status == 0) {
+						alert('You are offline!!n Please Check Your Network.');
+					} else if (x.status == 404) {
+						alert('Requested URL not found.');
+					} else if (x.status == 500) {
+						alert('Internel Server Error.');
+					} else if (e == 'parsererror') {
+						alert('Error.nParsing JSON Request failed.');
+					} else if (e == 'timeout') {
+						alert('Request Time out.');
+					} else {
+						alert('Unknow Error.n' + x.responseText);
+					}
+				}
+			});  //ajax
+			
+		}//if
+		else{alert('작성자가 아닙니다')}
 		
 		
+	}); //delBtn
+	
+	
+	/* 리리플 */
+	
+	$(document).on('click','#repBtn', function(){
+		
+	alert('리리플');
+	/* let pRelevel=String( parseInt( $(this).parent().attr('class'))+ 1 ) ;
+	alert(pRelevel);
+
+	alert(typeof(pRelevel));
+	
+	alert( $(this).parent().prev(`.`+pRelevel).attr('replyId') );  */
+	let pRelevel= $(this).parent().attr('class');
+	let rRelevel= String( parseInt( pRelevel )+ 1 );
+	let pReplyId= $(this).parent().attr('replyId');
+	let rReplyId= '0'; 
+	let npReplyId= $( `.`+pRelevel ).eq( $( `.`+pRelevel ).index( $(this).parent() )+ 1  ).attr('replyId');
+	
+	let gRelevel= parseInt(pRelevel)- 1 ;
+	/* let gReplyId= $( `.`+pRelevel ).eq( $( `.`+pRelevel ).index( $(this).parent() )+ 1  ).attr('replyId'); */
+	
+	
+	let ngReplyId= $(this).parent().nextAll( `.`+ gRelevel ).first().attr('replyId');
+	alert('시'+ngReplyId); 
+	/* alert( '인접'+ $( `.`+pRelevel ).eq( $( `.`+pRelevel ).index( $(this).parent() )+ 1  ).attr('replyId') ) */
+	/* let gRelevel= String( (parseInt(pRelevel)- 1) ); */
+	
+	/* alert( '는'+ $(`.`+gRelevel).eq(`.`+gRele) ) */
+	
+	         
+ 	 
+	
+	if(npReplyId){if( parseInt(gRelevel)< 0  ||  parseInt(npReplyId)> parseInt(ngReplyId) ){
+		rReplyId= String( parseInt(npReplyId) +1 );
+		alert('1은'+rReplyId)
+		
+		
+	}} else{
+		rReplyId= String( parseInt(pReplyId) );
+		alert('2는'+rReplyId)
+	} 
+	
+	let url= '/rReplyWrite/'+ ${good.goodId}+ '?rReplyId='+ rReplyId+ '&memberMail='+ sessionMemberMail+ '&rRelevel='+ rRelevel;          
+     alert('?') 	
+		window.open(url, "rReplyWrite","width = 500, height = 500, top = 100, left = 200, location = no");
+	
+	
+	
+	
+
+	
+	/* let url=
+'/rReplyWrite/${good.goodId}?rReplyId='+rReplyId+'&memberMail='+sessionMemberMail+'&rRelevel='+rRelevel ;          
+ 	window.open(url, "rReplyWrite","width = 500, height = 500, top = 100, left = 200, location = no");  */
+
+	/* $(".class").eq( $(".class").index( $(element) ) + 1 ) */
+	
+	});//repBtn
+	
+	
+	
+	$('#cartBtn').click(function(){
+		console.log('cartBtn')
+		
+		if(! sessionMemberMail){
+			alert('로그인해주세요')
+			return false;
+		}
+		
+		let form={
+			goodId: ${good.goodId},
+			memberMail:  sessionMemberMail,
+			goodCount: $('#quantityInput').val()
+		}
+		alert('goodId'+${good.goodId}+'memberMail'+ sessionMemberMail+'quan'+$('#quantityInput').val())
+		
+		$.ajax({
+				url : '/cart/add',
+				type : 'post',
+				async : false,
+				data : JSON.stringify(form),
+				contentType : "application/json;charset=UTF-8",
+				dataType : 'json',
+				success : function(result) {
+					
+					alert("카트에 추가했습니다");
+						
+				
+				},	
+				error : function(x, e) {
+					if (x.status == 0) {
+						alert('You are offline!!n Please Check Your Network.');
+					} else if (x.status == 404) {
+						alert('Requested URL not found.');
+					} else if (x.status == 500) {
+						alert('Internel Server Error.');
+					} else if (e == 'parsererror') {
+						alert('Error.nParsing JSON Request failed.');
+					} else if (e == 'timeout') {
+						alert('Request Time out.');
+					} else {
+						alert('Unknow Error.n' + x.responseText);
+					}
+				}
+			}); //ajax
+		
+	}); //cartBtn
 		
 		
 	
 		
-		
-	});//modBtn
-		
-		
-		
-		
+	
 		
 	
 	

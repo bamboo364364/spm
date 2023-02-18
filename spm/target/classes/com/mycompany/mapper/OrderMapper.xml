@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.mycompany.mapper.OrderMapper">
+	
+	
+<!-- 주문 상품 정보 -->
+	<select id="getGoodsInfo" resultType="com.mycompany.model.OrderPageItemDTO">
+	
+		select goodId, goodName, goodPrice, goodDiscount, goodStock
+		from spm_good where goodId = #{goodId}	
+	
+	</select>
+	
+	
+	<!-- 주문. 주문테이블에 정보추가 -->
+	<insert id='order'>
+		
+		insert into spm_order
+	(orderId, memberMail, memberName, memberAddr1, memberAddr2, memberAddr3, orderState, deliveryCost, usePoint, orderDate)
+		values(#{orderId}, #{memberMail}, #{memberName}, #{memberAddr1}, #{memberAddr2}, #{memberAddr3}, '배송준비', #{deliveryCost}, #{usePoint}, sysdate )             
+		
+	</insert>
+	
+	<!-- 주문. 회원 재화차감 -->
+	<update id='orderPay'>
+		
+		update spm_member set money= #{money}, point= #{point} where memberMail= #{memberMail} 
+	
+	</update>
+	
+	<!-- 주문. 재고변동 -->
+	<update id='stockChange'>
+		update spm_good set goodStock= #{goodStock} where goodId= #{goodId} 
+	</update>	
+
+	
+	<!-- 주문. 카트제거 -->
+	<delete id='cartDel'>
+		delete spm_cart where goodId= #{goodId} and memberMail= #{memberMail}
+	</delete>
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+  </mapper>

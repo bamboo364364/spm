@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.mycompany.mapper.CartMapper">
+	
+	
+	
+	<!-- 카트 추가 -->
+	<insert id="addCart">
+	
+		insert into spm_cart(memberMail, goodId, goodCount)
+		values(#{memberMail}, #{goodId}, #{goodCount}) 
+	
+	</insert>
+	
+	
+	<!-- 카트 목록 -->
+	<select id="getCart" resultType="com.mycompany.model.CartDTO">
+	
+		select a.cartId, a.memberMail, a.goodId, a.goodCount, b.goodName, b.goodPrice, b.goodDiscount
+		from spm_cart a left join spm_good b on a.goodId = b.goodId
+		where memberMail = #{memberMail} order by a.cartId desc
+	
+	</select>
+	
+	<!-- 카트삭제 -->
+	
+	<delete id='cartDelete'>
+	delete spm_cart where cartId= #{cartId}
+	</delete>
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+  </mapper>
