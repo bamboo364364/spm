@@ -20,12 +20,11 @@ cateCode varchar2(30),
 goodPrice number not null ,
 goodStock number not null,
 goodDiscount number(2,2),
-goodIntro clob,
 goodContents clob,
 goodMaker varchar2(50),
 regDate date,
 modDate date,
-ratingAvg number(2,1),
+ratingAvg number(2,1) default 0.0,
 foreign key(cateCode) references spm_cate(cateCode)
 );
 
