@@ -67,7 +67,7 @@ foreign key (goodId) references spm_good(goodId)
 주문
 create table spm_order(
 orderId varchar2(50) primary key,
-memberName varchar2(50),
+memberName varchar2(50) not null,
 memberMail varchar2(50),
 memberAddr1 varchar2(100) not null,
 memberAddr2 varchar2(100) not null,
