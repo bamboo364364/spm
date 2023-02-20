@@ -38,7 +38,7 @@ public class OrderController {
 	@GetMapping("/orderView")
 	public void orderGet(String memberMail, OrderPageDTO opd, Model model) {
 		
-		model.addAttribute("orderList", orderService.getGoodsInfo(opd.getOrders()));
+		model.addAttribute("orderLit", orderService.getGoodsInfo(opd.getOrders()));
 		model.addAttribute("memberInfo", memberService.getMemberInfo(memberMail));
 	
 	}

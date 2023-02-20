@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.model.CartDTO;
 import com.mycompany.model.MemberVO;
@@ -42,9 +43,9 @@ public class CartController {
 
 	@PostMapping("/add")
 	@ResponseBody
-	public void addCartPOST(@RequestBody CartDTO dto) {
+	public int addCartPOST(@RequestBody CartDTO dto) {
 		logger.info(dto.toString());
-		cartService.addCart(dto);
+		return cartService.addCart(dto);
 
 	}
 

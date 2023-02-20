@@ -207,12 +207,14 @@ float:right; width: 30%; border: 1px solid black;
   	
    	<!-- orderPost전달폼 -->
   	<form action='/order/order' method='post' class='orderForm'>
-  	<input type="hidden" name='usePoint' class='orderFormPoint'/>
+  	<input type="hidden" name='usePoint' class='orderFormUsePoint'/>
   	<input type="hidden" name='memberAddr1' class='orderFormMemberAddr1'/>
   	<input type="hidden" name='memberAddr2' class='orderFormMemberAddr2'/>
   	<input type="hidden" name='memberAddr3' class='orderFormMemberAddr3'/>
   	<input type="hidden" name='memberName' class='orderFormMemberName'/>
   	<input type="hidden" name='memberMail' class='orderFormMemberMail'/>
+  	<input type="hidden" name='money' class='orderFormMoney'/>
+  	<input type="hidden" name='point' class='orderFormPoint'/>
   	</form>
   	
   	
@@ -227,8 +229,9 @@ float:right; width: 30%; border: 1px solid black;
   	<span class='memPayDivMoneyPoint'></span>
   	<span class='memPayDivMoneyResult'></span>
   	</p>       			
-  	<p>사용포인트 <input type="text" class='memPayDivPoint' placeholder="${memberInfo.point}" /> </p>
-  	<p class='memPayDivPointWarn'></p>
+  	<p>사용포인트 <input type="text" class='memPayDivPoint' value='0' /> </p>
+  	
+  	<p class='memPayDivPointWarn'>${memberInfo.point}</p>
   	</div>
 	
 	
@@ -242,7 +245,11 @@ float:right; width: 30%; border: 1px solid black;
 	<script>
 	
 	sessionStorage.setItem('memberMail', '${member.memberMail}');
+	sessionStorage.setItem('money', '${member.money}');
+	sessionStorage.setItem('point', '${member.point}');
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
+	var sessionMoney= sessionStorage.getItem('money');
+	var sessionPoint= sessionStorage.getItem('point');
 	
 	$(document).ready(function(){
 		
@@ -324,9 +331,10 @@ function setTotalInfo(){
 	$("#finalTotalPriceP").html('총결제 예상금액: <del>'+finalTotalPriceB+'</del><br />' + finalTotalPrice.toLocaleString());		
 	
 	$('.memPayDivMoneyConsume').html('-'+ finalTotalPrice)
-	var moneyUse= finalTotalPrice + parseInt( $('.memPayDivPoint').val() );
+	var moneyUse= finalTotalPrice - parseInt( $('.memPayDivPoint').val() );
+	var remMoney=  parseInt( sessionMoney )- parseInt(moneyUse) ;
 	$('.memPayDivMoneyPoint').html('+'+ $('.memPayDivPoint').val() ) 
-	$('.memPayDivMoneyResult').html('='+ moneyUse ) 
+	$('.memPayDivMoneyResult').html('='+ remMoney ) 
 	
 	
 	} //setTotalInfo
@@ -442,12 +450,14 @@ function setTotalInfo(){
   	$('.orderBtn').click(function(){
   		if( !sessionMemberMail ){alert('다시 로그인해주세요')}else{
   		
-  		$('.orderForm').find('.orderFormPoint').val( $('.memPayDivPoint').val() );
+  		$('.orderForm').find('.orderFormUsePoint').val( $('.memPayDivPoint').val() );
   		$('.orderForm').find('.orderFormMemberAddr1').val( $('#memberAddr1').val() );
   		$('.orderForm').find('.orderFormMemberAddr2').val( $('#memberAddr2').val() );
   		$('.orderForm').find('.orderFormMemberAddr3').val( $('#memberAddr3').val() );
   		$('.orderForm').find('.orderFormMemberName').val( $('#memberName').val() );
   		$('.orderForm').find('.orderFormMemberMail').val( sessionMemberMail );
+  		$('.orderForm').find('.orderFormMoney').val( sessionMoney );
+  		$('.orderForm').find('.orderFormPoint').val( sessionPoint );
   		
   		$('.infoTd').each(function(i,e){
   			let goodIdInput= `<input type="hidden" name= 'orders[`+i+`].goodId' value= '`+$(this).find("#goodId").val()+`'/>`                                     

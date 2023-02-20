@@ -427,7 +427,7 @@ var replyHtmlInit= function(pageNum, amount){
 	});//repBtn
 	
 	
-	
+	//카트에담기 버튼
 	$('#cartBtn').click(function(){
 		console.log('cartBtn')
 		
@@ -435,13 +435,14 @@ var replyHtmlInit= function(pageNum, amount){
 			alert('로그인해주세요')
 			return false;
 		}
+		if( parseInt( $('#quantityInput').val() )> ${good.goodStock} ){alert('재고부족') }else{
 		
 		let form={
 			goodId: ${good.goodId},
 			memberMail:  sessionMemberMail,
 			goodCount: $('#quantityInput').val()
+			
 		}
-		alert('goodId'+${good.goodId}+'memberMail'+ sessionMemberMail+'quan'+$('#quantityInput').val())
 		
 		$.ajax({
 				url : '/cart/add',
@@ -451,8 +452,10 @@ var replyHtmlInit= function(pageNum, amount){
 				contentType : "application/json;charset=UTF-8",
 				dataType : 'json',
 				success : function(result) {
-					
+					if(result==1)
 					alert("카트에 추가했습니다");
+					if(result==0)
+					alert('재고부족')
 						
 				
 				},	
@@ -472,7 +475,7 @@ var replyHtmlInit= function(pageNum, amount){
 					}
 				}
 			}); //ajax
-		
+		} //else Stock
 	}); //cartBtn
 		
 		

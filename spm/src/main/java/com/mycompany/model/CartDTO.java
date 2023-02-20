@@ -26,6 +26,17 @@ private int point;
 
 private int totalPoint;
 
+//카트에서 재고확인
+private int goodStock;
+
+public int getGoodStock() {
+	return goodStock;
+}
+
+public void setGoodStock(int goodStock) {
+	this.goodStock = goodStock;
+}
+
 private List<AttachImageVO> imageList;
 
 public int getCartId() {
@@ -137,7 +148,7 @@ public String toString() {
 	return "CartDTO [cartId=" + cartId + ", memberMail=" + memberMail + ", goodId=" + goodId + ", goodCount="
 			+ goodCount + ", goodName=" + goodName + ", goodPrice=" + goodPrice + ", goodDiscount=" + goodDiscount
 			+ ", salePrice=" + salePrice + ", totalPrice=" + totalPrice + ", point=" + point + ", totalPoint="
-			+ totalPoint + ", imageList=" + imageList + "]";
+			+ totalPoint + ", goodStock=" + goodStock + ", imageList=" + imageList + "]";
 }
 
 

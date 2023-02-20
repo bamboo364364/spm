@@ -38,7 +38,7 @@ public class GoodVO {
 	/* 상품 메이커 */
 	private String goodMaker;
 	
-	/* (주문용) 주문상품수 */
+	/* 주문상품수? */
 	private int goodCount;
 	
 	public int getGoodCount() {

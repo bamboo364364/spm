@@ -88,7 +88,7 @@ private OrderMapper orderMapper;
 		
 		GoodVO gv= new GoodVO();
 		gv.setGoodId(oid.getGoodId());
-		gv.setGoodCount(oid.getGoodCount());
+		gv.setGoodStock( gv.getGoodStock()- oid.getGoodCount() );
 		lgv.add(gv);
 		
 		CartDTO cd= new CartDTO();
@@ -104,12 +104,12 @@ private OrderMapper orderMapper;
 		//orderPay
 		int money= ( mv.getMoney()- od.getOrderFinalSalePrice() );
 		int point= ( mv.getPoint()- od.getUsePoint()+ od.getOrderSavePoint() );
-		
 		MemberVO mvp= new MemberVO();
 		mvp.setMoney(money);
 		mvp.setPoint(point);
 		mvp.setMemberMail(mv.getMemberMail());
 		orderMapper.orderPay(mvp);
+		logger.info("lgv는"+ lgv.toString());
 		//재고변동
 		for(GoodVO gv: lgv){
 		orderMapper.stockChange(gv);

@@ -15,4 +15,7 @@ public interface CartMapper {
 	/* 카트삭제 */
 	public void cartDelete(int cartId);
 	
+	/* 재고검색 */
+	public int stockSearch(CartDTO dto);
+	
 }

@@ -30,6 +30,11 @@
 	delete spm_cart where cartId= #{cartId}
 	</delete>
 	
+	<!-- 재고검색  -->
+	<select id="stockSearch" resultType="int">
+	select goodStock from spm_good where goodId= #{goodId}
+	</select>
+	
 	
 
 	
