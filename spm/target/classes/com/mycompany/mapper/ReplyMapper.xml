@@ -27,7 +27,15 @@
 	<!-- 리플수정 -->
 	<update id="replyModify">
 	update spm_reply set
-    replyContent= #{replyContent}, rating= #{rating}
+    replyContent= #{replyContent},
+    <if test='rating != null'> rating= #{rating} </if>
+     where replyId= #{replyId}
+	</update>
+	
+	<!-- 리리플수정 -->
+	<update id="rReplyModify">
+	update spm_reply set
+    replyContent= #{replyContent}
      where replyId= #{replyId}
 	</update>
 	
@@ -57,6 +65,44 @@
 	select count(*) from spm_reply where goodId= #{goodId}
 	
 	</select>
+	
+	
+		<!-- 리플수(평점계산) -->
+	<select id="rootReplyGetTotal" resultType="int">
+	select count(*) from spm_reply where goodId= #{goodId}
+	 and relevel <![CDATA[ < ]]> 1 
+	</select>
+	
+	<!-- 평점계산 get-->
+	<select id="ratingAvgGet" resultType="double">
+	select ratingAvg from spm_good where goodId= #{goodId}
+	</select>
+	
+	
+	<!-- 평점계산 update-->
+	<update id='ratingAvgUpdate'>
+	update spm_good set ratingAvg= #{ratingAvg} where goodId= #{goodId}
+	</update>
+	
+	<!-- 리플조회 1개 -->
+	<select id="replySearch" resultType="com.mycompany.model.ReplyDTO">
+	select replyId, goodId, memberMail, regDate, replyContent, rating, relevel 
+	 from spm_reply
+
+	 where replyId= #{replyId} 
+	 </select>
+	
+	
+	<!-- 리플조회 여러개 -->
+	<select id="replySearches" resultType="com.mycompany.model.ReplyDTO">
+	select replyId, goodId, memberMail, regDate, replyContent, rating, relevel 
+	 from spm_reply
+	 
+	 where replyId <![CDATA[ <= ]]> #{replyId} and replyId <![CDATA[ > ]]> #{ntReplyId}
+	 
+	</select>
+	
+	
 	
 	
 	

@@ -9,7 +9,7 @@
 		insert into spm_member values(#{memberMail},
 		#{memberPw}, #{memberName},
 		#{memberAddr1}, #{memberAddr2},
-		#{memberAddr3}, 0, 100000, 5000, sysdate)
+		#{memberAddr3}, 1, 100000, 5000, sysdate)
 	</insert>
 
 	<!-- 메일중복검사 -->

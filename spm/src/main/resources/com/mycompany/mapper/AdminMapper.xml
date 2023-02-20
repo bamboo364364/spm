@@ -28,8 +28,8 @@
 		</selectKey>
 
 		insert into spm_good(goodName,cateCode, goodPrice, goodStock,
-		goodDiscount, goodContents, regDate)
-		values(#{goodName},#{cateCode},#{goodPrice},#{goodStock},#{goodDiscount},#{goodContents}, sysdate)
+		goodDiscount, goodContents, regDate, goodMaker)
+		values(#{goodName},#{cateCode},#{goodPrice},#{goodStock},#{goodDiscount},#{goodContents}, sysdate, #{goodMaker})
 
 	</insert>
 	
@@ -79,7 +79,7 @@
 	<select id="goodGetDetail" resultType="com.mycompany.model.GoodVO">
 
 		select goodId, goodName, cateCode, goodPrice, goodStock, goodDiscount, goodMaker,
-		goodContents, regDate, modDate
+		goodContents, regDate, modDate, ratingAvg
 		from spm_good where goodId = #{goodId}
 
 	</select>

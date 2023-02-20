@@ -23,7 +23,7 @@
 <body>
 <div>
 
-	
+	<c:if test='${dto.relevel le 0}' >
 	<select name="rating" id="rating">
 	<option value="0">0</option>
 	<option value="0.5">0.5</option>
@@ -33,7 +33,7 @@
 	<option value="2.5">2.5</option>
 	<option value="3">3</option>
 	</select>
-	sadasds ${dto.replyId}
+	</c:if> 
 	
 	<script>
 	$(document).ready(function(){ 
@@ -60,12 +60,13 @@
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
 	
 	$('#replyModifyBtn').on('click', function(){
-		alert($('#replyContent').val())
+		
 		
 		let form={
 			replyId: ${dto.replyId},
 			rating: $('#rating').val(),
-			replyContent: $('#replyContent').val()
+			replyContent: $('#replyContent').val(),
+			goodId: ${dto.goodId}
 		}
 		
 		$.ajax({
@@ -77,7 +78,7 @@
 				dataType : 'json',
 				success : function(result) {
 					
-					alert("완료");
+					alert("수정 완료");
 					$(opener.location).attr("href", "javascript:replyHtmlInit();");
 					window.close();
 				

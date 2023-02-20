@@ -63,13 +63,14 @@ public class ReplyController {
 	
 	/* 리플수정팝업페이지 */
 	@GetMapping("/replyModify/{goodId}")
-	public String replyModifyGet(@PathVariable("goodId") int goodId, int replyId, int relevel, int rating, String replyContent, Model model){
+	public String replyModifyGet(@PathVariable("goodId") int goodId, int replyId, int relevel, double rating, String replyContent, Model model){
 	
 	ReplyDTO dto= new ReplyDTO();
 	dto.setReplyId(replyId);
 	dto.setRelevel(relevel);
 	dto.setRating(rating);
 	dto.setReplyContent(replyContent);
+	dto.setGoodId(goodId);
 	model.addAttribute("dto", dto);
 	return "/replyModify";
 	}

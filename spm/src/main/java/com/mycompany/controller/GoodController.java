@@ -17,14 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mycompany.model.AttachImageVO;
 import com.mycompany.model.Criteria;
 import com.mycompany.model.GoodVO;
 import com.mycompany.model.PageDTO;
+import com.mycompany.model.ReplyDTO;
 import com.mycompany.service.AdminService;
 import com.mycompany.service.AttachService;
 import com.mycompany.service.MemberService;
@@ -112,8 +110,10 @@ public class GoodController {
 	
 	model.addAttribute("good", good);
 	
-	model.addAttribute("pageMaker", new PageDTO(cri, replyService.replyGetTotal(goodId)));
-	
+	ReplyDTO dto= new ReplyDTO();
+	dto.setGoodId(goodId);
+	model.addAttribute("pageMaker", new PageDTO(cri, replyService.replyGetTotal(dto)));
+	logger.info(dto.toString());
 	return "/goodDetail";	
 	
 	

@@ -40,11 +40,11 @@
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
 	
 	$(document).ready(function(){
-		alert(sessionMemberMail);
+		
 	});
 	
 	$('#rReplyEnrollBtn').on('click',function(){
-		alert('투고');
+		
 		
 		let form={
 			replyId: ${dto.replyId},
@@ -63,7 +63,7 @@
 				dataType : 'json',
 				success : function(result) {
 					
-					alert("완료");
+					alert("투고 완료");
 					$(opener.location).attr("href", "javascript:replyHtmlInit();");	
 				window.close();
 				},	

@@ -2,8 +2,6 @@ package com.mycompany.service;
 
 import java.util.List;
 
-import javax.mail.Session;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mycompany.controller.ReplyController;
 import com.mycompany.mapper.ReplyMapper;
 import com.mycompany.model.Criteria;
+import com.mycompany.model.GoodVO;
 import com.mycompany.model.ReplyDTO;
 
 @Service
@@ -27,7 +26,23 @@ private ReplyMapper replyMapper;
 /* 리플 등록 */
 @Override
 	public int replyEnroll(ReplyDTO dto){
+	logger.info("리플등록 메서드 진입");
+	logger.info("dto는"+ dto.toString());
+	double avg= replyMapper.ratingAvgGet(dto.getGoodId());
+	logger.info("ratingAvgGet은"+ avg);
+	double nAvg= dto.getRating() ;
+	int repTotal= replyMapper.rootReplyGetTotal(dto);
+	logger.info("total는"+ repTotal);
+	double rAvg= (avg*repTotal+ nAvg)/(repTotal+ 1); 
+	logger.info("rAvg는"+ rAvg);
+	GoodVO gv= new GoodVO();
+	gv.setGoodId(dto.getGoodId());
+	gv.setRatingAvg(rAvg);
+	logger.info("gv는"+ gv.toString());
+	replyMapper.ratingAvgUpdate(gv);
+	
 	return replyMapper.replyEnroll(dto);
+	
 	};
 
 
@@ -41,6 +56,25 @@ private ReplyMapper replyMapper;
 /* 리플 수정 */
 @Override
 	public void replyModify(ReplyDTO dto){
+	logger.info("리플수정 메서드 진입");
+	ReplyDTO oDto= replyMapper.replySearch(dto);
+	double oAvg= oDto.getRating();
+	
+	double avg= replyMapper.ratingAvgGet(dto.getGoodId());
+	
+	double nAvg= dto.getRating() ;
+	
+	int repTotal= replyMapper.rootReplyGetTotal(dto);
+	
+	double rAvg= ( avg*repTotal- oAvg+ nAvg )/ repTotal ;
+	
+	
+	GoodVO gv= new GoodVO();
+	gv.setGoodId(dto.getGoodId());
+	gv.setRatingAvg(rAvg);
+	logger.info("gv"+gv);
+	replyMapper.ratingAvgUpdate(gv);
+	
 	replyMapper.replyModify(dto);
 	
 	};
@@ -48,7 +82,31 @@ private ReplyMapper replyMapper;
 /* 리플삭제 */
 @Override
 	public void replyDelete(ReplyDTO dto){
+	logger.info("리플삭제 메서드 진입");
+	List<ReplyDTO>dDtoL= replyMapper.replySearches(dto);
 	
+	double avg= replyMapper.ratingAvgGet(dto.getGoodId());
+	logger.info("//////////////avg"+ avg);
+	int repTotal= replyMapper.rootReplyGetTotal(dto);
+	logger.info("repTotal"+ repTotal);
+	double avgRt= avg* repTotal;
+	logger.info("avgRt"+ avgRt);
+	double dAvg= 0.0;
+	
+	for(ReplyDTO dDto: dDtoL){
+		dAvg+= dDto.getRating();
+		logger.info("dAvg"+ dAvg);
+	}
+	logger.info("dDtoL.size"+ dDtoL.size());
+	double rAvg=0.0;
+	if( repTotal- dDtoL.size()== 0 ){rAvg= 0.0;}else{
+	rAvg= (avgRt- dAvg)/(repTotal- dDtoL.size()); }//else
+	logger.info("rAvg"+ rAvg);
+	GoodVO gv= new GoodVO();
+	gv.setGoodId(dto.getGoodId());
+	gv.setRatingAvg(rAvg);
+	replyMapper.ratingAvgUpdate(gv);
+	if( dto.getNtReplyId()==0 ){ dto.setNtReplyId(-1);}
 	replyMapper.replyDelete(dto);
 	
 	}
@@ -70,9 +128,12 @@ private ReplyMapper replyMapper;
 
 	/* 리플수(페이지계산) */
 	@Override
-	public int replyGetTotal(int goodId){
-	return replyMapper.replyGetTotal(goodId);
+	public int replyGetTotal(ReplyDTO dto){
+	return replyMapper.replyGetTotal(dto);
 	}
+	
+	
+	
 
 
 

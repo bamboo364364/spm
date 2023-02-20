@@ -51,7 +51,7 @@ h1, #upNav {display: inline;}
 	
 	<div id='box1'>
 	<div id="goodId">상품명</div>
-	<div class="red">${good.goodId}</div><br />
+	<div class="red">${good.goodName}</div><br />
 	<div id="goodId">상품분류</div>
 	<div class="red">${good.cateCode}</div><br />
 	<div id="goodId">상품메이커</div>
@@ -67,7 +67,7 @@ h1, #upNav {display: inline;}
 	<div class="red">${good.goodDiscount}</div><br />
 	<div id="goodId">상품가격</div>
 	<div class="red"><del>${good.goodPrice}</del>
-	<span style='color:blue;'><fmt:formatNumber value='114514' pattern="#,###" /></span>
+	<span style='color:blue;'><fmt:formatNumber value='10' pattern="#,###" /></span>
 	</div><br />
 	<div id="goodId">적립포인트</div>
 	<div class="red">point</div><br />
@@ -82,6 +82,10 @@ h1, #upNav {display: inline;}
 	<button id='cartBtn'>카트에 담기</button> <br /><br />
 	<button id='buyBtn'>바로 구매</button>
 	</div>
+	
+	<script>
+	/* ${(good.goodPrice)}* (1-${good.goodDiscount}) */
+	</script>
 	
 	<script>
 	var quantity= $('#quantityInput').val() ;
@@ -236,7 +240,7 @@ var replyHtmlInit= function(pageNum, amount){
 				dataType : 'json',
 				success : function(result) {
 					replyHtmlMake(result); 
-					alert("완료 replyHtmlInit");
+					/* alert("완료 replyHtmlInit"); */
 						
 				
 				},	
@@ -267,7 +271,7 @@ var replyHtmlInit= function(pageNum, amount){
 		$.each(result, function(i, obj){
 		
 			html+= `<div id='reply' style='border: 1px solid black;'
-			class='`+obj.relevel+`' relevel= '`+obj.relevel+`' memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>                                 
+			class='`+obj.relevel+`' memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>                                 
 			리플번호: '`+obj.replyId+`'<br />
 			작성자: '`+obj.memberMail+`' <br />
 			작성일: '`+obj.regDate+`' <br />
@@ -290,10 +294,12 @@ var replyHtmlInit= function(pageNum, amount){
 		
 		e.preventDefault();
 		
-		alert('modBtn');
+		
 		
 		if( $(this).parent().attr('memberMail')== sessionMemberMail )
-		{let url='/replyModify/${good.goodId}?replyId='+$(this).parent().attr('replyId')+'&memberMail='+sessionMemberMail+'&relevel=0&rating='+$(this).parent().attr('rating')+ '&replyContent=' +$(this).parent().attr('replyContent')                      
+		{ 
+			let url='/replyModify/${good.goodId}?replyId='+$(this).parent().attr('replyId')+'&memberMail='+sessionMemberMail+'&rating='+ $(this).parent().attr('rating') + '&replyContent=' +$(this).parent().attr('replyContent')+ '&relevel='+ $(this).parent().attr('class')        
+		                                                                                                                  
  	window.open(url, "replyModify","width = 500, height = 500, top = 100, left = 200, location = no");
 				}else{alert('작성자가 아닙니다');}
 		
@@ -310,7 +316,8 @@ var replyHtmlInit= function(pageNum, amount){
 		let ntReplyId= $( `.`+tRelevel ).eq( $( `.`+tRelevel ).index( $(this).parent() )+ 1  ).attr('replyId');
 		let form= {
 				replyId: replyId,
-				ntReplyId: ntReplyId			
+				ntReplyId: ntReplyId,
+				goodId: ${good.goodId}
 		}
 		
 		if( $(this).parent().attr('memberMail')== sessionMemberMail ){
@@ -322,7 +329,7 @@ var replyHtmlInit= function(pageNum, amount){
 				contentType : "application/json;charset=UTF-8",
 				dataType : 'json',
 				success : function() {
-					alert('replyDeleteBtnSuc');
+					alert('리플삭제 완료');
 					replyHtmlInit();
 			
 				
@@ -354,58 +361,68 @@ var replyHtmlInit= function(pageNum, amount){
 	/* 리리플 */
 	
 	$(document).on('click','#repBtn', function(){
-		
-	alert('리리플');
-	/* let pRelevel=String( parseInt( $(this).parent().attr('class'))+ 1 ) ;
-	alert(pRelevel);
-
-	alert(typeof(pRelevel));
+	if(!sessionMemberMail){alert('로그인해주세요') }else{
 	
-	alert( $(this).parent().prev(`.`+pRelevel).attr('replyId') );  */
 	let pRelevel= $(this).parent().attr('class');
 	let rRelevel= String( parseInt( pRelevel )+ 1 );
 	let pReplyId= $(this).parent().attr('replyId');
 	let rReplyId= '0'; 
-	let npReplyId= $( `.`+pRelevel ).eq( $( `.`+pRelevel ).index( $(this).parent() )+ 1  ).attr('replyId');
+	let npReplyId= $(this).parent().nextAll( `.`+ pRelevel ).first().attr('replyId');
 	
+	if(!npReplyId){ 
+		if( !$(this).parent().next().attr('replyId') ){rReplyId= pReplyId ;} 
+		else{ rReplyId= $(this).parent().nextAll().last().attr('replyId'); } 
+	}//if!npReplyId
+	else{
+		
 	let gRelevel= parseInt(pRelevel)- 1 ;
-	/* let gReplyId= $( `.`+pRelevel ).eq( $( `.`+pRelevel ).index( $(this).parent() )+ 1  ).attr('replyId'); */
+	let ngReplyId= '0';
+	
+	if(gRelevel< 0){ngReplyId= parseInt(npReplyId)-1 }
+	else{ngReplyId= parseInt( $(this).parent().nextAll( `.`+ gRelevel ).first().attr('replyId') );}
+	
+	if(npReplyId> ngReplyId){rReplyId= String( parseInt(npReplyId)+1 ) ;} //
+	else{
+		if( $(this).parent().nextAll( `.`+ rRelevel ).last().attr('replyId') ){
+		rReplyId= $(this).parent().nextAll( `.`+ rRelevel ).last().attr('replyId')  ;}
+		else{rReplyId= pReplyId;}	
+	}
+	
+	}//else npReplyId
 	
 	
-	let ngReplyId= $(this).parent().nextAll( `.`+ gRelevel ).first().attr('replyId');
-	alert('시'+ngReplyId); 
-	/* alert( '인접'+ $( `.`+pRelevel ).eq( $( `.`+pRelevel ).index( $(this).parent() )+ 1  ).attr('replyId') ) */
-	/* let gRelevel= String( (parseInt(pRelevel)- 1) ); */
 	
-	/* alert( '는'+ $(`.`+gRelevel).eq(`.`+gRele) ) */
 	
-	         
- 	 
 	
-	if(npReplyId){if( parseInt(gRelevel)< 0  ||  parseInt(npReplyId)> parseInt(ngReplyId) ){
+	/* let gRelevel= parseInt(pRelevel)- 1 ;
+	let ngReplyId= '0';
+	if(gRelevel< 0){ngReplyId= parseInt(npReplyId)-1
+	}elseif( $(this).parent().nextAll( `.`+ gRelevel ).first().attr('replyId') )
+	{ ngReplyId= $(this).parent().nextAll( `.`+ gRelevel ).first().attr('replyId');
+	}else{ngReplyId= -2;}
+	
+	
+	console.log('npReplyId는'+ npReplyId)
+
+	if(npReplyId ){if( parseInt(npReplyId)> parseInt(ngReplyId) ){
+		alert('1번npReplyId는 '+npReplyId)
 		rReplyId= String( parseInt(npReplyId) +1 );
-		alert('1은'+rReplyId)
+	if(!npReplyId || $(this).parent().nextAll( `.`+ String(parseInt(pRelevel)+1) ).first().attr('replyId')>  )
+		
 		
 		
 	}} else{
-		rReplyId= String( parseInt(pReplyId) );
-		alert('2는'+rReplyId)
-	} 
+		alert('2번npReplyId는 '+npReplyId)
+		rReplyId= pReplyId ;
+		
+	}  */
 	
 	let url= '/rReplyWrite/'+ ${good.goodId}+ '?rReplyId='+ rReplyId+ '&memberMail='+ sessionMemberMail+ '&rRelevel='+ rRelevel;          
-     alert('?') 	
+  
 		window.open(url, "rReplyWrite","width = 500, height = 500, top = 100, left = 200, location = no");
 	
 	
-	
-	
-
-	
-	/* let url=
-'/rReplyWrite/${good.goodId}?rReplyId='+rReplyId+'&memberMail='+sessionMemberMail+'&rRelevel='+rRelevel ;          
- 	window.open(url, "rReplyWrite","width = 500, height = 500, top = 100, left = 200, location = no");  */
-
-	/* $(".class").eq( $(".class").index( $(element) ) + 1 ) */
+	}//else sessionMail
 	
 	});//repBtn
 	

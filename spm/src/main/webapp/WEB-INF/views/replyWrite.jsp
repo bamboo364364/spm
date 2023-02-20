@@ -51,12 +51,13 @@
 	sessionStorage.setItem('memberMail', '${member.memberMail}');
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
 	
-	$(document).ready(function(){
-		alert(sessionMemberMail);
-	});
+
 	
 	$('#replyEnrollBtn').on('click',function(){
-		alert('투고');
+		
+		if( $('#replyContent').val().replace(/\s|　/gi, "").length == 0 ){alert('내용을입력해주세요')
+		}else{
+		
 		
 		let form={
 			memberMail: sessionMemberMail,
@@ -75,7 +76,7 @@
 				dataType : 'json',
 				success : function(result) {
 					
-					alert("완료");
+					alert("투고 완료");
 					$(opener.location).attr("href", "javascript:replyHtmlInit();");	
 				
 					/* window.close(); */
@@ -102,6 +103,7 @@
 					}
 				}
 			}); //ajax
+		}//else
 
 	}); 
 	
