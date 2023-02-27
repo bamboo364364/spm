@@ -9,11 +9,11 @@
 <!-- bootStrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<!-- í•©ì³ì§€ê³  ìµœì†Œí™”ëœ ìµœì‹  CSS -->
+<!-- ÇÕÃÄÁö°í ÃÖ¼ÒÈ­µÈ ÃÖ½Å CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<!-- í•©ì³ì§€ê³  ìµœì†Œí™”ëœ ìµœì‹  ìë°”ìŠ¤í¬ë¦½íŠ¸ -->
+<!-- ÇÕÃÄÁö°í ÃÖ¼ÒÈ­µÈ ÃÖ½Å ÀÚ¹Ù½ºÅ©¸³Æ® -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<!-- ë¶€ê°€ì ì¸ í…Œë§ˆ -->
+<!-- ºÎ°¡ÀûÀÎ Å×¸¶ -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 
@@ -37,14 +37,14 @@
 	<table class='table' id='goodTable'>
 	<thead>
 		<tr>
-			<th scope='col'>ìƒí’ˆëª…</th>
-			<th scope='col'>ìƒí’ˆë¶„ë¥˜</th>
-			<th scope='col'>ìƒí’ˆë©”ì´ì»¤</th>
-			<th scope='col'>ë“±ë¡ì¼ì</th>
-			<th scope='col'>í‰ì </th>
-			<th scope='col'>ìƒí’ˆí• ì¸</th>
-			<th scope='col'>ìƒí’ˆê°€ê²©</th>
-			<th scope='col'>ìƒí’ˆì¬ê³ </th>
+			<th scope='col'>»óÇ°¸í</th>
+			<th scope='col'>»óÇ°ºĞ·ù</th>
+			<th scope='col'>»óÇ°¸ŞÀÌÄ¿</th>
+			<th scope='col'>µî·ÏÀÏÀÚ</th>
+			<th scope='col'>ÆòÁ¡</th>
+			<th scope='col'>»óÇ°ÇÒÀÎ</th>
+			<th scope='col'>»óÇ°°¡°İ</th>
+			<th scope='col'>»óÇ°Àç°í</th>
 			
 		</tr>
 	</thead>
@@ -62,36 +62,35 @@
 		
 	</table>
 	
-	<b>ìƒí’ˆìƒì„¸</b>
+	<b>»óÇ°»ó¼¼</b>
   <textarea readonly="readonly" class="form-control">${good.goodContents}</textarea>
 	
 	<div>
-	<button class='btn btn-outline-success' id='cartBtn'>ì¹´íŠ¸ì—ë‹´ê¸°</button>
-	<button class='btn btn-outline-success' id='buyBtn'>ë°”ë¡œêµ¬ë§¤</button>
+	<button class='btn btn-outline-success' id='cartBtn'>Ä«Æ®¿¡´ã±â</button>
+	<button class='btn btn-outline-success' id='buyBtn'>¹Ù·Î±¸¸Å</button>
 	</div>
 	<c:if test='${member != null}'>
-	<button class='btn btn-outline-info' id='replyBtn'>ë¦¬ë·°ì‘ì„±</button><br /><br />
+	<button class='btn btn-outline-primary' id='replyBtn'>¸®ºäÀÛ¼º</button><br /><br />
 	</c:if>
 	
-	
-	<div class= 'border' id='replyDiv'>
-	
+	<div class='row'>
+	<div class='col col-lg-2' id='replyDiv'>
 	</div>
-	
+	</div>
 	
 	
 
-		<!--ë¦¬í”Œ í˜ì´ì§€ ì´ë™ ì¸í„°í˜ì´ìŠ¤ -->
+		<!--¸®ÇÃ ÆäÀÌÁö ÀÌµ¿ ÀÎÅÍÆäÀÌ½º -->
 		<div class="pageMakeWrap">
 			<ul class="pageMaker">
 
-				<!-- ì´ì „ ë²„íŠ¼ -->
+				<!-- ÀÌÀü ¹öÆ° -->
 				<c:if test="${pageMaker.prev }">
 					<li class="pageMakerBtn prev"><a
-						href="${pageMaker.pageStart -1}">ì´ì „</a></li>
+						href="${pageMaker.pageStart -1}">ÀÌÀü</a></li>
 				</c:if>
 
-				<!-- í˜ì´ì§€ ë²ˆí˜¸ -->
+				<!-- ÆäÀÌÁö ¹øÈ£ -->
 				<c:forEach begin="${pageMaker.pageStart }"
 					end="${pageMaker.pageEnd }" var="num">
 					<li
@@ -100,10 +99,10 @@
 					</li>
 				</c:forEach>
 
-				<!-- ë‹¤ìŒ ë²„íŠ¼ -->
+				<!-- ´ÙÀ½ ¹öÆ° -->
 				<c:if test="${pageMaker.next}">
 					<li class="pageMakerBtn next"><a
-						href="${pageMaker.pageEnd + 1 }">ë‹¤ìŒ</a></li>
+						href="${pageMaker.pageEnd + 1 }">´ÙÀ½</a></li>
 				</c:if>
 			</ul>
 		</div>
@@ -117,7 +116,7 @@
 	var sessionMemberMail= sessionStorage.getItem('memberMail');
 	
 	
-		/*ë¦¬í”Œ í˜ì´ì§€ ì´ë™ ë²„íŠ¼ */
+		/*¸®ÇÃ ÆäÀÌÁö ÀÌµ¿ ¹öÆ° */
  $(document).on('click','.pageMakerBtn a', function(e){
 	
 	e.preventDefault();
@@ -130,7 +129,7 @@
 	
 
 	
-		/* ì´ë¯¸ì§€ ì‚½ì… */
+		/* ÀÌ¹ÌÁö »ğÀÔ */
 	var imageWrap = $(".imageWrap");
 
 	if(imageWrap.attr("goodId")){
@@ -180,7 +179,7 @@
 	}); 
 	
 
-	/* ë¦¬í”Œìƒì„±ì§€ì‹œí•¨ìˆ˜ */
+	/* ¸®ÇÃ»ı¼ºÁö½ÃÇÔ¼ö */
 	var replyHtmlInit= function(pageNum, amount){
 		
 		let form={
@@ -198,7 +197,7 @@
 				dataType : 'json',
 				success : function(result) {
 					replyHtmlMake(result); 
-					/* alert("ì™„ë£Œ replyHtmlInit"); */
+					/* alert("¿Ï·á replyHtmlInit"); */
 						
 				
 				},	
@@ -221,38 +220,33 @@
 	}//replyHtmlInit
 		
 	
-	/* ë¦¬í”Œìƒì„±í•¨ìˆ˜ */
+	/* ¸®ÇÃ»ı¼ºÇÔ¼ö */
 	var replyHtmlMake= function(result){
 		
 		let html= ''
 		
 		$.each(result, function(i, obj){
-		/* `+String((obj.relevel)*5)+` */
-			html+=
-			`
-			<div class='border col-3' style="margin-left:10%;>
-			<div
-			id='reply' class='`+obj.relevel+`memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>
-			ë¦¬í”Œë²ˆí˜¸: '`+obj.replyId+`'<br />
-			ì‘ì„±ì: '`+obj.memberMail+`' <br />
-			ì‘ì„±ì¼: '`+obj.regDate+`' <br />
-			í‰ì : '`+obj.rating+`' <br />
-			ë¦¬ë ˆë²¨: '`+obj.relevel+`'<br />
+		
+			html+= `<div id='reply' style='border: 1px solid black;'
+			class='`+obj.relevel+`' memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>                                 
+			¸®ÇÃ¹øÈ£: '`+obj.replyId+`'<br />
+			ÀÛ¼ºÀÚ: '`+obj.memberMail+`' <br />
+			ÀÛ¼ºÀÏ: '`+obj.regDate+`' <br />
+			ÆòÁ¡: '`+obj.rating+`' <br />
+			¸®·¹º§: '`+obj.relevel+`'<br />
 			`+obj.replyContent+`<br />
-			<button type='button' class='btn btn-outline-primary' id='modBtn'>ìˆ˜ì •</button><button class='btn btn-outline-danger' id='delBtn'>ì‚­ì œ</button> <button class='btn btn-outline-info' id='repBtn'>ëŒ“ê¸€ë‹¬ê¸°</button>
-			</div>
-			</div>
-			`
+			<button id='modBtn'>¼öÁ¤</button><button id='delBtn'>»èÁ¦</button> <button id='repBtn'>´ñ±Û´Ş±â</button>
+			</div> `
 	
 		});//each
 		
-		$('# replyDiv').html(html);
+		$('#replyDiv').html(html);
 		
 	}; //replyHtmlMake
 	
 	
 	
-	/* ë¦¬í”Œìˆ˜ì • */
+	/* ¸®ÇÃ¼öÁ¤ */
 	$(document).on('click','#modBtn', function(e){
 		
 		e.preventDefault();
@@ -264,13 +258,13 @@
 			let url='/replyModify/${good.goodId}?replyId='+$(this).parent().attr('replyId')+'&memberMail='+sessionMemberMail+'&rating='+ $(this).parent().attr('rating') + '&replyContent=' +$(this).parent().attr('replyContent')+ '&relevel='+ $(this).parent().attr('class')        
 		                                                                                                                  
  	window.open(url, "replyModify","width = 500, height = 500, top = 100, left = 200, location = no");
-				}else{alert('ì‘ì„±ìê°€ ì•„ë‹™ë‹ˆë‹¤');}
+				}else{alert('ÀÛ¼ºÀÚ°¡ ¾Æ´Õ´Ï´Ù');}
 		
 
 	});//modBtn
 	
 	
-	/* ë¦¬í”Œì‚­ì œ */
+	/* ¸®ÇÃ»èÁ¦ */
 	
 	$(document).on('click','#delBtn', function(e){
 		
@@ -292,7 +286,7 @@
 				contentType : "application/json;charset=UTF-8",
 				dataType : 'json',
 				success : function() {
-					alert('ë¦¬í”Œì‚­ì œ ì™„ë£Œ');
+					alert('¸®ÇÃ»èÁ¦ ¿Ï·á');
 					replyHtmlInit();
 			
 				
@@ -315,16 +309,16 @@
 			});  //ajax
 			
 		}//if
-		else{alert('ì‘ì„±ìê°€ ì•„ë‹™ë‹ˆë‹¤')}
+		else{alert('ÀÛ¼ºÀÚ°¡ ¾Æ´Õ´Ï´Ù')}
 		
 		
 	}); //delBtn
 	
 	
-	/* ë¦¬ë¦¬í”Œ */
+	/* ¸®¸®ÇÃ */
 	
 	$(document).on('click','#repBtn', function(){
-	if(!sessionMemberMail){alert('ë¡œê·¸ì¸í•´ì£¼ì„¸ìš”') }else{
+	if(!sessionMemberMail){alert('·Î±×ÀÎÇØÁÖ¼¼¿ä') }else{
 	
 	let pRelevel= $(this).parent().attr('class');
 	let rRelevel= String( parseInt( pRelevel )+ 1 );
@@ -369,15 +363,15 @@
 	});//repBtn
 	
 	
-	//ì¹´íŠ¸ì—ë‹´ê¸° ë²„íŠ¼
+	//Ä«Æ®¿¡´ã±â ¹öÆ°
 	$('#cartBtn').click(function(){
 		console.log('cartBtn')
 		
 		if(! sessionMemberMail){
-			alert('ë¡œê·¸ì¸í•´ì£¼ì„¸ìš”')
+			alert('·Î±×ÀÎÇØÁÖ¼¼¿ä')
 			return false;
 		}
-		if( parseInt( $('#quantityInput').val() )> ${good.goodStock} ){alert('ì¬ê³ ë¶€ì¡±') }else{
+		if( parseInt( $('#quantityInput').val() )> ${good.goodStock} ){alert('Àç°íºÎÁ·') }else{
 		
 		let form={
 			goodId: ${good.goodId},
@@ -395,9 +389,9 @@
 				dataType : 'json',
 				success : function(result) {
 					if(result==1)
-					alert("ì¹´íŠ¸ì— ì¶”ê°€í–ˆìŠµë‹ˆë‹¤");
+					alert("Ä«Æ®¿¡ Ãß°¡Çß½À´Ï´Ù");
 					if(result==0)
-					alert('ì¬ê³ ë¶€ì¡±')
+					alert('Àç°íºÎÁ·')
 						
 				
 				},	

@@ -5,61 +5,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>home</title>
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
-<script src="https://code.jquery.com/jquery-3.4.1.js"
-	integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-	crossorigin="anonymous">
-	
-</script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-<style>
-h1, #upNav {
-	display: inline;
-}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- bootStrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-#upNav {
-	float: right;
-}
+
+<meta charset="UTF-8">
+<title>search</title>
+
+<style>
+
 </style>
 </head>
 <body>
-	<h1>쇼핑몰</h1>
-	<div id="upNav">
-		<c:if test="${member==null}">
-		<a href="/member/join">회원가입</a> <a href="/member/login">로그인</a>
-		</c:if>
-		<c:if test="${member!=null}">
-			<c:if test="${member.adminCk==1}">
-			<a href="/admin/goodManage">관리자페이지</a> 
-			</c:if>
-			<a id="logout">로그아웃</a> <a href="/member/admin/myroom?memberMail=${member.memberMail}">마이룸</a>
-			<a href="/cart/cartView?memberMail=${member.memberMail}">카트</a><br />
-			<span style='color:red;' >${member.memberName}</span>
-			<span>충전금액<fmt:formatNumber value="${member.money}" pattern="\#,###.##"/></span>
-			<span>포인트<fmt:formatNumber value="${member.point}" pattern="\#,###.##"/></span>
-			
-		</c:if>
-	</div>
+	
+	<%@include file="./includes/header.jsp" %>
 	
 	
 	<!-- 검색 영역 -->
   
   		<form id="searchForm">
   			<div id='searchDiv'">
-  				<select name="type" id="type">
+  				<select class='form-select' name="type" id="type">
   				<option value="D">등록일자순</option>
   				<option value="C">카테고리정렬</option>
   				<option value="P">가격순</option>
   				<option value="S">재고순</option>
   				</select>
-      			<input type="text" name="keyword" value='${pageMaker.cri.keyword}'>
-      			<input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
+      			<input class='form-control' type="text" name="keyword" value='${pageMaker.cri.keyword}'>
+      			<input type="hidden" name="pageNum" value='1'>
       			<input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
-      			<button class='btn search_btn'>검 색</button>                				
+      			<button class='btn btn-outline-primary search_btn'>검 색</button>                				
   			</div>
   		</form>
   		
@@ -80,15 +63,15 @@ h1, #upNav {
     </c:if>
     
     <c:if test="${listCheck != 'empty'}">
-	<table id='goodListTable'>
+	<table class='table' id='goodListTable'>
 	<thead>
 		<tr>
-			<td>상품번호</td>
-			<td>상품이름</td>
-			<td>상품분류</td>
-			<td>상품가격</td>
-			<td>상품재고</td>
-			<td>등록일자</td>
+			<th scope='col'>상품번호</th>
+			<th scope='col'>상품이름</th>
+			<th scope='col'>상품분류</th>
+			<th scope='col'>상품가격</th>
+			<th scope='col'>상품재고</th>
+			<th scope='col'>등록일자</th>
 		</tr>
 	</thead>
 		<c:forEach items='${list}' var='list'>
@@ -117,8 +100,9 @@ h1, #upNav {
   			
   			<!-- 페이지 번호 -->
   			<c:forEach begin="${pageMaker.pageStart }" end="${pageMaker.pageEnd }" var="num">
-  				<li class="pageMaker_btn ${pageMaker.cri.pageNum == num ? 'active':''}">
-  					<a href="${num}">${num}</a>
+  				<li style='display: inline;'
+  				class="btn btn-outline-light pageMaker_btn ${pageMaker.cri.pageNum == num ? 'active':''}">
+  					<a href="${num}">${num}</a> 
   				</li>	
   			</c:forEach>
   		

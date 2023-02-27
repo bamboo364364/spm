@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.model.AttachImageVO;
+import com.mycompany.model.CateVO;
 import com.mycompany.model.Criteria;
 import com.mycompany.model.GoodVO;
 import com.mycompany.model.PageDTO;
@@ -60,23 +62,19 @@ public class AdminController {
 		ObjectMapper mapper = new ObjectMapper();
 		List list = adminService.cateList();
 		String cateList = mapper.writeValueAsString(list);
-		model.addAttribute("cateList", cateList);
+		model.addAttribute("cv", cateList);
 	}
 
 	/* 상품 등록 */
 	@PostMapping("/goodEnroll")
 	public String goodEnrollPOST(GoodVO good, RedirectAttributes rttr) {
-
-		// ckEditor p태그
-		good.setGoodContents(good.getGoodContents().replace("<p>", ""));
-		good.setGoodContents(good.getGoodContents().replace("</p>", ""));
-
+	
 		logger.info("goodsEnrollPOST......" + good);
 		adminService.goodEnroll(good);
 		
-		rttr.addFlashAttribute("enroll_result", good.getGoodName());
+		rttr.addFlashAttribute("enrollResult", good.getGoodName());
 
-		return "redirect:/admin/goodManage";
+		return "redirect:/admin/goodManage"; //
 	}
 
 	/* 상품 관리(상품목록) 페이지 접속 */
@@ -84,7 +82,7 @@ public class AdminController {
 	public void goodManageGET(Criteria cri, Model model) throws Exception {
 
 		logger.info("상품 관리(상품목록) 페이지 접속");
-	
+		
 		/* 상품 리스트 데이터 */
 		List list = adminService.goodGetList(cri);
 
@@ -101,40 +99,60 @@ public class AdminController {
 
 	}// goodManage
 	
-	
-	/* 상품 조회 페이지, 상품 수정 페이지 */
-	@GetMapping({ "/goodsDetail", "/goodsModify" })
-	public void goodsGetInfoGET(Criteria cri, Model model) throws JsonProcessingException {
-
-		logger.info("goodsGetInfo()........." + cri.getgoodId());
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		/* 카테고리 리스트 데이터 */
-		model.addAttribute("cateList", mapper.writeValueAsString(adminService.cateList()));
-
-		/* 목록 페이지 조건 정보 */
+	@GetMapping("/adminGoodDetail/{goodId}")
+	public String adminGoodDetailGet( @PathVariable("goodId") int goodId, Criteria cri, Model model ){
+	logger.info("관리.상품상세페이지 진입");
+		GoodVO good= adminService.goodGetDetail(goodId);
+		model.addAttribute("good", good);
 		model.addAttribute("cri", cri);
+	
+	
+return "/admin/adminGoodDetail";
 
-		/* 조회 페이지 정보 */
-		model.addAttribute("goodsInfo", adminService.goodGetDetail(cri.getgoodId()));
+	}
+	
+	
 
-	}//goodInfo
+	/* 수정페이지 */
+	@GetMapping("/goodModify/{goodId}")
+	public String goodModifyGet(@PathVariable("goodId") int goodId, Criteria cri, Model model) throws JsonProcessingException{
+	logger.info("상품수정페이지 진입");
+	GoodVO good= adminService.goodGetDetail(goodId);
+		model.addAttribute("good", good);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		List list = adminService.cateList();
+		String cateList = mapper.writeValueAsString(list);
+		model.addAttribute("cv", cateList);
+		model.addAttribute("cri", cri);
+	
+	 return "/admin/goodModify";
+	}
+	
 	
 	
 	/* 상품 정보 수정 */
-	@PostMapping("/goodsModify")
-	public String goodsModifyPOST(GoodVO vo, RedirectAttributes rttr) {
+	@PostMapping("/goodModify")
+	public String goodsModifyPOST(GoodVO gv, Criteria cri, RedirectAttributes rttr) {
 
-		logger.info("goodsModifyPOST.........." + vo);
+		logger.info("goodsModifyPOST.........." + gv);
 
-		int result = adminService.goodModify(vo);
+		int result = adminService.goodModify(gv);
 
-		rttr.addFlashAttribute("modify_result", result);
+		rttr.addFlashAttribute("modifyResult", result);
 
-		return "redirect:/admin/goodsManage";
+		return "redirect:/admin/goodManage?pageNum="+cri.getPageNum()+"&amount="+cri.getAmount()+"&keyword="+cri.getKeyword();
 
-	}//goodModify
+	}
+	
+	/* 상품삭제 */
+	@PostMapping("/goodDelete")
+	public String goodDelete(int goodId, Criteria cri, RedirectAttributes rttr){
+	logger.info(goodId+"삭제메서드진입");
+		int result= adminService.goodDelete(goodId);
+		rttr.addFlashAttribute("deleteResult", result);
+		return "redirect:/admin/goodManage?type="+cri.getType()+"&keyword="+cri.getKeyword()+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
+	}
 	
 	
 	
@@ -214,25 +232,6 @@ public class AdminController {
 				multipartFile.transferTo(saveFile);
 
 				/* 썸네일 생성(ImageIO) */
-				/*
-				 * File thumbnailFile = new File(uploadPath, "s_" + uploadFileName);
-				 * 
-				 * BufferedImage bo_image = ImageIO.read(saveFile);
-				 * 
-				 * //비율 double ratio = 3; //넓이 높이 int width = (int) (bo_image.getWidth() /
-				 * ratio); int height = (int) (bo_image.getHeight() / ratio);
-				 * 
-				 * BufferedImage bt_image = new BufferedImage(width, height,
-				 * BufferedImage.TYPE_3BYTE_BGR);
-				 * 
-				 * Graphics2D graphic = bt_image.createGraphics();
-				 * 
-				 * graphic.drawImage(bo_image, 0, 0,width,height, null);
-				 * 
-				 * ImageIO.write(bt_image, "jpg", thumbnailFile);
-				 */
-
-				/* 방법 2 */
 				File thumbnailFile = new File(uploadPath, "s_" + uploadFileName);
 
 				BufferedImage bo_image = ImageIO.read(saveFile);
@@ -294,5 +293,12 @@ public class AdminController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 
 	}
+	
+	
+	
+	
+
+	
+	
 
 }// class

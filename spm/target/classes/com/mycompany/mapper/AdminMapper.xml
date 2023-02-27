@@ -79,7 +79,8 @@
 	<select id="goodGetDetail" resultType="com.mycompany.model.GoodVO">
 
 		select goodId, goodName, cateCode, goodPrice, goodStock, goodDiscount, goodMaker,
-		goodContents, regDate, modDate, ratingAvg
+		goodContents, regDate, modDate, ratingAvg,
+		(select cateName from spm_cate where spm_good.cateCode = spm_cate.cateCode) cateName
 		from spm_good where goodId = #{goodId}
 
 	</select>
@@ -96,7 +97,7 @@
 	</update>
 
 	<!-- 상품 정보 삭제 -->
-	<delete id="goodsDelete">
+	<delete id="goodDelete">
 
 		delete from spm_good where goodId = #{goodId}
 

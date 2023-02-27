@@ -1,116 +1,150 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- bootStrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
 <meta charset="UTF-8">
 <title>goodEnroll</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
-	
-</script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-<style>#sideNavLi2{background-color: gray;}
+
+<style>
+
 </style>
 </head>
 <body>
-	<p>상품등록페이지입니다</p>
+	<p>상품 등록페이지입니다</p>
+		<%@include file="../includes/adminHeader.jsp" %>
+		
+	<div class="imageWrap"> 
+	<img>
+	<button class= 'imgDeleteBtn btn'>x</button>
+	</div>
 
-	<%@include file="../includes/adminHeader.jsp" %>
-	<div id="center" style="text-align: center">
-	<form id="goodEnrollForm" action="/admin/goodEnroll" method="post">
-		<input id="goodName" name="goodName" type="text" placeholder="상품명" />
-		<p class="goodNameWarn"></p>
-		<p>대분류</p><select id="cate1"><option selected value="none">선택</option></select>
-		<p>중분류</p><select id="cate2"><option selected value="none">선택</option></select>
-		<p>소분류</p><select id="cate3" name="cateCode"><option selected value="none">선택</option></select>
-		<p class="cateCodeWarn"></p><br />
-		<input id="goodPrice" name="goodPrice" type="text" placeholder="가격" />
-		<p class="goodPriceWarn"></p>
-		<input id="goodDiscountShow" type="text" placeholder="할인율" />
-		<input id="goodDiscountSend" name="goodDiscount" type="hidden"/>
-		<p class="goodDiscountInfo"></p>
-		<p class="goodDiscountWarn"></p>
-		<input id="goodStock" name="goodStock" type="text" placeholder="재고" />
-		<p class="goodStockWarn"></p>
-		<input id="goodMaker" name="goodMaker" type="text" placeholder="메이커"/> 
-		<p class="goodMakerWarn"></p><br />
-		<label>상세정보</label>
-		<div id="goodContentsDiv">
-		<textarea name="goodContents" id="goodContents"></textarea>
-		<p class="goodContentsWarn"></p>
-		</div>
-		<label>상품 이미지</label>
-		<input type="file" id ="fileItem" name='uploadFile'>
-		<div id='uploadResult'></div><br /><br />
-         <button type="button" id="enrollBtn">등록</button>  
-         </form>
-         </div>  			
+
+	<form class='enrollForm' action="/admin/goodEnroll" method='post'>
 	
+        <div class="custom-file">
+            <input type="file" class="custom-file-input form-control" id="fileInput">
+            <label class="custom-file-label" for="customFile">파일선택</label>
+        </div>
+        <input class='fileName' type='hidden' name='imageList[0].fileName'>
+		<input class='uuid'  type='hidden' name='imageList[0].uuid'>
+		<input class='uploadPath' type='hidden' name='imageList[0].uploadPath'>
+		
+    
+
+
+	<table class='table' id='goodListTable'>
+	<thead>
+		<tr>
+			<th scope='col'>상품명</th>
+			<th scope='col'>상품분류</th>
+			<th scope='col'>상품메이커</th>
+			<th scope='col'>등록일자</th>
+			<th scope='col'>평점</th>
+			<th scope='col'>상품할인</th>
+			<th scope='col'>상품가격</th>
+			<th scope='col'>상품재고</th>
+			
+		</tr>
+	</thead>
+		
+		<tr>
+			<td><input id='goodName' name='goodName' class="form-control input" type="text"/>
+			<span class='goodNameWarn'></span>
+			</td>
+			<td>
+			<input id='cateShow' class="form-control" type="text" readonly="readonly"/>
+			<select id="cate1" class='form-select input'><option selected value="none">대분류</option></select>
+			<select id="cate2" class='form-select input'><option selected value="none">중분류</option></select>
+			<select id="cate3" class='form-select input'  name="cateCode"><option selected value="none"> 소분류</option></select>
+			<span class='cateCodeWarn'></span>
+			</td>
+			<td><input id='goodMaker' name='goodMaker' class="form-control input"  type="text"/>
+			<span class='goodMakerWarn'></span>
+			</td>
+			<td><input id='regDate' readonly="readonly" class="form-control input"  type="text"/>
+			<span style='color:green'>수정불가</span>
+			</td>
+			<td><input id='ratingAvg' readonly="readonly" class="form-control input"  type="text"/>
+			<span style='color:green'>수정불가</span>
+			</td>
+			<td><input id='goodDiscountShow'  class="form-control input"  type="text"/>
+			<input type="hidden" id='goodDiscount' name='goodDiscount'/>
+			<span class='goodDiscountWarn'></span>
+			</td>
+			<td><input id='goodPrice' name='goodPrice' class="form-control input"  type="text"/>
+			<span class='goodPriceWarn'></span>
+			</td>
+			<td><input id='goodStock' name='goodStock' class="form-control input"  type="text"/>
+			<span class='goodStockWarn'></span>
+			</td>
+			
+		</tr>
+		
+	</table>
+
 	
-
+		
+  <b>상품상세</b>
+  <textarea id='goodContents' name='goodContents' class="form-control input"></textarea>
+  <span class='goodContentsWarn'></span><br />
+  
+  	<input type="hidden" name="keyword" value='${cri.keyword}'>
+    <input type="hidden" name="pageNum" value='${cri.pageNum}'>
+    <input type="hidden" name="amount" value='${cri.amount}'>
+    <input type="hidden" name="type" value='${cri.type}'>
+	</form>	 <!-- enrollForm -->
 	
+	<div class='btnArea'>
+	<button class='btn-outline-primary btn enrollBtn'>등록</button>
+	</div> 
 
-
-<!-- <script src="https://cdn.ckeditor.com/ckeditor5/26.0.0/classic/ckeditor.js"></script>
- -->
-
-<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-
-
-
-<script>
-
-
-ClassicEditor.create( document.querySelector( '#goodContents' ),{language: 'ko'} ).then
-(function(contents){
-	theEditor= contents;
-}).catch(function(error){
-	console.error(error);
-});
-
-   
-
-
-var goodNameCheck= false;
-var cateCodeCheck= false;
-var goodPriceCheck= false;
-var goodStockCheck= false;
-var goodDiscountCheck= false;
-var goodMakerCheck= false;
-var goodContentsCheck= false;
-
-
-
-		
-		
-		
-
-	$(document).on('ready', function(){
-		
-		$('.goodNameWarn').css('color','red');
-		$('.goodNameWarn').html('상품명을 입력해주세요');
-		$('.cateCodeWarn').css('color','red');
-		$('.cateCodeWarn').html('카테고리를 입력해주세요');
-		$('.goodPriceWarn').css('color','red');
-		$('.goodPriceWarn').html('상품가격을 입력해주세요');
-		$('.goodDiscountWarn').css('color','red');
-		$('.goodDiscountWarn').html('할인율을 입력해주세요');
-		$('.goodStockWarn').css('color','red');
-		$('.goodStockWarn').html('상품재고를 입력해주세요');
-		$('.goodMakerWarn').css('color','red');
-		$('.goodMakerWarn').html('메이커명을 입력해주세요');
-		$('.goodContentsWarn').css('color','red');
-		$('.goodContentsWarn').html('상세정보를 입력해주세요');
-		
-		
+	<script>
+	
+	sessionStorage.setItem('memberMail', '${member.memberMail}');
+	var sessionMemberMail= sessionStorage.getItem('memberMail');
+	
+	var goodNameCheck= false;
+	var cateCodeCheck= false;
+	var goodPriceCheck= false;
+	var goodStockCheck= false;
+	var goodDiscountCheck= false;
+	var goodMakerCheck= false;
+	var goodContentsCheck= false;
+	
+	var imageWrap= $('.imageWrap');
+	
+	/* documentready */
+	$(document).ready(function(){
+		let uploadPath= $('.uploadPath').val();
+		let uuid= $('.uuid').val();
+		let fileName= $('.fileName').val();
+		imageWrapInsert(uploadPath, uuid, fileName);
+	
+		inputCheck();
 		
 	});
 	
-	$('#goodName').on("propertychange change keyup paste input", function(){
-		if($(this).val()){
+	
+	
+	
+	/* 공란체크함수 */
+	var inputCheck= function(){
+		if($('#goodName').val()){
 			$('.goodNameWarn').css('color','green');
 			$('.goodNameWarn').html('상품명 확인');
 			goodNameCheck= true;
@@ -119,10 +153,7 @@ var goodContentsCheck= false;
 			$('.goodNameWarn').html('상품명을 입력해주세요');
 			goodNameCheck= false;
 		}
-			});//propertyChange
-			
-	$('#cate3').on("change", function(){
-		if( $(this).val()!= 'none'){
+		if( $('#cate3').val()!= 'none'){
 			$('.cateCodeWarn').css('color','green');
 			$('.cateCodeWarn').html('카테고리 확인');
 			cateCodeCheck= true;
@@ -131,10 +162,7 @@ var goodContentsCheck= false;
 			$('.cateCodeWarn').html('카테고리를 입력해주세요');
 			cateCodeCheck= false;
 		}
-			});//propertyChange
-			
-	$('#goodPrice').on("propertychange change keyup paste input", function(){
-		if( !isNaN( $(this).val() )&& $(this).val() ){
+		if( !isNaN( $('#goodPrice').val() )&& $('#goodPrice').val() ){
 			$('.goodPriceWarn').css('color','green');
 			$('.goodPriceWarn').html('상품가격 확인');
 			goodPriceCheck= true;
@@ -143,17 +171,10 @@ var goodContentsCheck= false;
 			$('.goodPriceWarn').html('숫자를 입력해주세요');
 			goodPriceCheck= false;
 		}
-			});//propertyChange		
-			
-	
-	/* 할인율 Input 설정 */
-	
-	$("#goodDiscountShow, #goodPrice").on("propertychange change keyup paste input", function(){
-		console.log("할인율작동");
-		let goodDiscountShow= $("#goodDiscountShow");
-		let goodDiscountSend= $("#goodDiscountSend");
-		let goodDiscountWarn = $(".goodDiscountWarn");
 		
+		let goodDiscountShow= $("#goodDiscountShow");
+		let goodDiscount= $("#goodDiscount");
+		let goodDiscountWarn = $(".goodDiscountWarn");
 		
 		let discountRate = goodDiscountShow.val();	// 사용자가 입력한 할인값
 		let sendDiscountRate = discountRate / 100;	//서버전송할할인값
@@ -163,19 +184,15 @@ var goodContentsCheck= false;
 		if(!isNaN(discountRate)&& discountRate){
 			goodDiscountWarn.css('color','green');	
 			goodDiscountWarn.html(`할인가격:`+ discountPrice);		
-			goodDiscountSend.val(sendDiscountRate);
+			goodDiscount.val(sendDiscountRate);
 			goodDiscountCheck= true;
 		}else{
 			goodDiscountWarn.css('color','red');
 			goodDiscountWarn.html(`숫자를입력해주세요`);
-			goodDiscountSend.val('');
+			goodDiscount.val('');
 			goodDiscountCheck= false;
 		}
-	
-	});	//propertyChange
-	
-	$('#goodStock').on("propertychange change keyup paste input", function(){
-		if( !isNaN( $(this).val() )&& $(this).val() ){
+		if( !isNaN( $('#goodStock').val() )&& $('#goodStock').val() ){
 			$('.goodStockWarn').css('color','green');
 			$('.goodStockWarn').html('상품재고 확인');
 			goodStockCheck= true;
@@ -184,10 +201,7 @@ var goodContentsCheck= false;
 			$('.goodStockWarn').html('숫자를 입력해주세요');
 			goodStockCheck= false;
 		}
-			});//propertyChange	
-			
-	$('#goodMaker').on("propertychange change keyup paste input", function(){
-		if( $(this).val() ){
+		if( $('#goodMaker').val() ){
 			$('.goodMakerWarn').css('color','green');
 			$('.goodMakerWarn').html('메이커명 확인');
 			goodMakerCheck= true;
@@ -196,11 +210,7 @@ var goodContentsCheck= false;
 			$('.goodMakerWarn').html('메이커명을 입력해주세요');
 			goodMakerCheck= false;
 		}
-			});//propertyChange
-			
-	$("#goodContentsDiv").on("propertychange change keyup paste input", function(){
-		
-		if( theEditor.getData()){
+		if($('#goodContents').val()){
 			$('.goodContentsWarn').css('color','green');
 			$('.goodContentsWarn').html('상세정보 확인');
 			goodContentsCheck= true;
@@ -209,23 +219,12 @@ var goodContentsCheck= false;
 			$('.goodContentsWarn').html('상세정보를 입력해주세요');
 			goodContentsCheck= false;
 		}
-			});//propertyChange	
-			
-	$('#enrollBtn').on('click', function(){
-		if(goodNameCheck&&cateCodeCheck&&goodPriceCheck&&goodDiscountCheck&&
-				goodPriceCheck&&goodMakerCheck&&goodContentsCheck){
-			$('#goodEnrollForm').submit();
-		}else{
-			alert('다시 입력해주세요');
-		}
-	});		
-			
 		
-		
-
-		
+	}
+	
+	
 	/* 카테고리 */
-	let cateList = JSON.parse('${cateList}');
+	let cateList = JSON.parse('${cv}');
 		
 	let cate1Array = new Array();
 	let cate2Array = new Array();
@@ -264,7 +263,6 @@ var goodContentsCheck= false;
 		cateSelect1.append("<option value='"+cate1Array[i].cateCode+"'>" + cate1Array[i].cateName + "</option>");
 	}
 	
-	
 	/* 중분류 <option> 태그 */
 	$(cateSelect1).on("change",function(){
 		
@@ -273,16 +271,16 @@ var goodContentsCheck= false;
 		cateSelect2.children().remove();
 		cateSelect3.children().remove();
 		
-		cateSelect2.append("<option value='none'>선택</option>");
-		cateSelect3.append("<option value='none'>선택</option>");
+		cateSelect2.append("<option value='none'>중분류</option>");
+		cateSelect3.append("<option value='none'>소분류</option>");
 		
 		for(let i = 0; i < cate2Array.length; i++){
 			if(selectVal1 === cate2Array[i].cateParent){
 				cateSelect2.append("<option value='"+cate2Array[i].cateCode+"'>" + cate2Array[i].cateName + "</option>");	
 			}
-		}// for
+		}
 		
-	});//cateSelect1
+	});
 	
 	/* 소분류 <option>태그 */
 	$(cateSelect2).on("change",function(){
@@ -291,34 +289,72 @@ var goodContentsCheck= false;
 		
 		cateSelect3.children().remove();
 		
-		cateSelect3.append("<option value='none'>선택</option>");		
+		cateSelect3.append("<option value='none'>소분류</option>");		
 		
 		for(let i = 0; i < cate3Array.length; i++){
 			if(selectVal2 === cate3Array[i].cateParent){
 				cateSelect3.append("<option value='"+cate3Array[i].cateCode+"'>" + cate3Array[i].cateName + "</option>");	
 			}
-		}// for		
+		}	
 		
-	});	//cateSelect2
+	});	
+	/* cateShow */
+	$(cateSelect3).on('change', function(){
+		$('#cateShow').val($('#cate3 option:selected').text());
+	});
+	
+	$('.input').on("propertychange change keyup paste input", function(){
+		inputCheck();
+	});
+	$('.input').on("change", function(){
+		inputCheck();
+	});
 	
 	
 	
+	/* enrollBtn동작 */
+	$('.enrollBtn').click(function(){
+		if(goodNameCheck&&cateCodeCheck&&goodPriceCheck&&goodDiscountCheck&&
+			goodPriceCheck&&goodMakerCheck&&goodStockCheck&&goodContentsCheck){
+			$('.enrollForm').submit(); 
+		}else{
+			alert('다시 입력해주세요');
+		}
+	});
+	
+	/* x버튼 동작 */
+	$('.imgDeleteBtn').click(function(){
+		deleteFile();
+	});
+	
+	/* 이미지 삽입 함수  */
+	var imageWrapInsert= function(uploadPath, uuid, fileName){
+		$('.uploadPath').val(uploadPath);
+		$('.uuid').val(uuid);
+		$('.fileName').val(fileName);
+		if(uploadPath){  
+		let fileCallPath = encodeURIComponent(uploadPath + "/s_" + uuid + "_" + fileName);
+		imageWrap.find("img").attr('src', '/display?fileName=' + fileCallPath);
+	} else {
+		imageWrap.find("img").attr('src', '/resources/img/goodsNoImage.png'); 
+	}	
+	}
 	
 	
 	
 	/* 이미지 업로드 */
-	$("#fileItem").on("change", function(e){
-		/* console.log($(this)[0].files[0]); */
-		
+	$("#fileInput").on("change", function(e){
+		 console.log($(this)[0].files[0]);
+		 
 		/* 이미지 존재시 삭제 */
-		if($(".imgDeleteBtn").length > 0){
+		if($('.uploadPath').val()){
 			deleteFile();
 		}
 		
 		let formData = new FormData();
-		let fileItem = $('#fileItem');
-		let fileList = fileItem[0].files;
-		let fileObj = fileList[0];
+		let fileInput = $(this);
+		let fileList = fileInput[0].files;
+		let fileObj = fileList[0] ;
 		
 		if(!fileCheck(fileObj.name, fileObj.size)){
 			return false;
@@ -335,7 +371,8 @@ var goodContentsCheck= false;
 	    	dataType : 'json',
 	    	success : function(result){
 	    		console.log(result);
-	    		showUploadImage(result);
+	    		if(!result || result.length == 0){return}
+	    		imageWrapInsert(result[0].uploadPath, result[0].uuid, result[0].fileName);
 	    	},
 	    	error : function(result){
 	    		alert("이미지 파일이 아닙니다.");
@@ -367,48 +404,16 @@ var goodContentsCheck= false;
 	}	
 	
 	
-	/* 이미지 출력 */
-	function showUploadImage(uploadResultArr){
-		
-		/* 전달받은 데이터 검증 */
-		if(!uploadResultArr || uploadResultArr.length == 0){return}
-		
-		let uploadResult = $("#uploadResult");
-		
-		let obj = uploadResultArr[0];
-		
-		let str = "";
-		
-		let fileCallPath = encodeURIComponent(obj.uploadPath.replace(/\\/g, '/') + "/s_" + obj.uuid + "_" + obj.fileName);
-		//replace 적용 하지 않아도 가능
-		//let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
-		
-		str += "<div id='result_card'>";
-		str += "<img src='/display?fileName=" + fileCallPath +"'>";
-		str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
-		str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
-		str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
-		str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";		
-		str += "</div>";		
-		
-   		uploadResult.append(str);     
-        
-	}	
 	
 	
-	/* 이미지 삭제 버튼 동작 */
-	$("#uploadResult").on("click", ".imgDeleteBtn", function(e){
-		
-		deleteFile();
-		
-	});
+	
+
 	
 	/* 파일 삭제 메서드 */
 	function deleteFile(){
-		
-		let targetFile = $(".imgDeleteBtn").data("file");
-		
-		let targetDiv = $("#result_card");
+if(!$('.uploadPath').val()){return false;}
+	let targetFile = encodeURIComponent($('.uploadPath').val()+ "/s_" + $('.uuid').val() + "_" + $('.fileName').val());
+
 		
 		$.ajax({
 			url: '/admin/deleteFile',
@@ -417,9 +422,9 @@ var goodContentsCheck= false;
 			type : 'POST',
 			success : function(result){
 				console.log(result);
+				imageWrapInsert();
 				
-				targetDiv.remove();
-				$("input[type='file']").val("");
+				$('#fileInput').val('');
 				
 			},
 			error : function(result){
@@ -430,16 +435,10 @@ var goodContentsCheck= false;
 		});
 	}
 	
-	
-		
-		
-		
-		
-		
-		
-
 
 </script>
+	
+
 
 
 </body>

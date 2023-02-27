@@ -3,9 +3,12 @@ package com.mycompany.service;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mycompany.controller.AdminController;
 import com.mycompany.mapper.AdminMapper;
 import com.mycompany.model.AttachImageVO;
 import com.mycompany.model.CateVO;
@@ -14,6 +17,8 @@ import com.mycompany.model.GoodVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
+
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
 	private AdminMapper adminMapper;
@@ -28,8 +33,12 @@ public class AdminServiceImpl implements AdminService {
 	/* 상품등록 */
 	@Override
 	public int goodEnroll(GoodVO good) {
-
-	if(good.getImageList() == null || good.getImageList().size() <= 0) {
+	logger.info("img"+ good.toString());
+	logger.info("img"+ good.getImageList().get(0).getUuid());
+	logger.info("img"+ good.getImageList().get(0).getFileName());
+	logger.info("img"+ good.getImageList().get(0).getUploadPath());
+	logger.info("img"+ good.getImageList().get(0).getGoodId());
+	if(good.getImageList().get(0).getFileName() == "" || good.getImageList().size() <= 0) {
 			return adminMapper.goodEnroll(good);
 		}
 		

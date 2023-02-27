@@ -1,46 +1,72 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
+<!-- bootStrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
 <meta charset="UTF-8">
 <title>goodManage</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" /> 
 	
-</script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"
+	integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+	crossorigin="anonymous"></script>
+	
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-<style>th, td {padding: 15px;} li{display: inline;} #sideNavLi1{background-color: gray;}
-</style>
+
+
+
+
+
+
+
 </head>
 <body>
+
 	<p>상품관리페이지입니다</p>
 
 	<%@include file="../includes/adminHeader.jsp" %>
 	
+
 	
+	
+
 	<c:if test="${listCheck == 'empty'}">
 	<div>등록된 상품이 없습니다</div>
     </c:if>
     
     <c:if test="${listCheck != 'empty'}">
-	<table id='goodListTable'>
+	<table class='table' id='goodListTable'>
 	<thead>
 		<tr>
-			<td>상품번호</td>
-			<td>상품이름</td>
-			<td>상품분류</td>
-			<td>상품가격</td>
-			<td>상품재고</td>
-			<td>등록일자</td>
+			<th scope='col'>상품번호</th>
+			<th scope='col'>상품이름</th>
+			<th scope='col'>상품분류</th>
+			<th scope='col'>상품가격</th>
+			<th scope='col'>상품재고</th>
+			<th scope='col'>등록일자</th>
+			
 		</tr>
 	</thead>
 		<c:forEach items='${list}' var='list'>
 		<tr>
 			<td><c:out value='${list.goodId}'></c:out></td>
-			<td><a href="/admin/goodDetail${list.goodName}"><c:out value='${list.goodName}'></c:out></a></td>
+			<td><a class='agdBtn' href="/admin/adminGoodDetail/${list.goodId}"><c:out value='${list.goodName}'></c:out></a></td>
 			<td><c:out value='${list.cateName}'></c:out></td>
 			<td><c:out value='${list.goodPrice}'></c:out></td>
 			<td><c:out value='${list.goodStock}'></c:out></td>
@@ -49,6 +75,17 @@
 		</tr>
 		</c:forEach>
 	</table>
+	
+	<script>
+	
+	// 관리자상품상세페이지 이동버튼
+	$('.agdBtn').click(function(e){
+		e.preventDefault();
+		$('#searchForm').attr('action', $(this).attr('href') );
+		$('#searchForm').submit();
+	});
+	
+	</script>
 	
 <!-- 페이지 이름 인터페이스 영역 -->
   	
@@ -63,8 +100,9 @@
   			
   			<!-- 페이지 번호 -->
   			<c:forEach begin="${pageMaker.pageStart }" end="${pageMaker.pageEnd }" var="num">
-  				<li class="pageMaker_btn ${pageMaker.cri.pageNum == num ? 'active':''}">
-  					<a href="${num}">${num}</a>
+  				<li style='display: inline;'
+  				class="btn btn-outline-light pageMaker_btn ${pageMaker.cri.pageNum == num ? 'active':''}">
+  					<a href="${num}">${num}</a> 
   				</li>	
   			</c:forEach>
   		
@@ -94,9 +132,9 @@
   				<option value="S">재고순</option>
   				</select>
       			<input type="text" name="keyword" value='${pageMaker.cri.keyword}'>
-      			<input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
+      			<input type="hidden" name="pageNum" value='1'>
       			<input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
-      			<button class='btn search_btn'>검 색</button>                				
+      			<button class='btn btn-outline-primary search_btn'>검 색</button>                				
   			</div>
   		</form>
   		
@@ -118,43 +156,26 @@
 		<input name='type' type="hidden" value='${pageMaker.cri.type}'/>
 	</form>
 
-	
 
 	
 <script>
 $(document).ready(function(){
-	
 	/* 등록 성공 이벤트 */
-	let eResult = '<c:out value="${enroll_result}"/>';
-	checkResult(eResult);
-	function checkResult(result){
-		
-		if(result === ''){
-			return;
+	if('${enrollResult}'){
+			alert("상품'"+ ${enrollResult} +"'을 등록하였습니다.");
 		}
-		
-		alert("상품'"+ eResult +"'을 등록하였습니다.");
-		
-	}
-	
-	/* 수정 성공 이벤트 */
-	let modify_result = '${modify_result}';
-	
-	if(modify_result == 1){
+ 
+	/* 수정 성공 이벤트 */	
+	if('${modifyResult}' == 1){
 		alert("수정 완료");
 	}	
 	
 	/* 삭제 결과 경고창 */
-	let delete_result = '${delete_result}';
-	
-	if(delete_result == 1){
+	if('${deleteResult}' == 1){
 		alert("삭제 완료");
 	}	
-	
-	
-	
 
-});//documentReady
+});
 
 /* 페이지 이동 버튼 */
 $(".pageMaker_btn a").on("click", function(e){

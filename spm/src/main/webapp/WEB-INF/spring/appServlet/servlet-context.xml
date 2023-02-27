@@ -29,20 +29,20 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/member/login.do"></mapping>
-			<beans:bean id="loginIntreceptor" class="com.mycompany.interceptor.LoginInterceptor"></beans:bean>
+			<beans:bean id="loginInterceptor" class="com.mycompany.interceptor.LoginInterceptor"></beans:bean>
 		</interceptor>
 		<interceptor>
 			<mapping path="/admin/**"></mapping>
-			<beans:bean id="AdminIntreceptor" class="com.mycompany.interceptor.AdminInterceptor"></beans:bean>
+			<beans:bean id="AdminInterceptor" class="com.mycompany.interceptor.AdminInterceptor"></beans:bean>
 		</interceptor>
 		<interceptor>
 			<mapping path="/cart/**"/>
 			<exclude-mapping path="/cart/add"/>
-			<beans:bean id="CartIntreceptor" class="com.mycompany.interceptor.CartInterceptor"></beans:bean>
+			<beans:bean id="CartInterceptor" class="com.mycompany.interceptor.CartInterceptor"></beans:bean>
 		</interceptor>
 		<interceptor>
 			<mapping path="/order/**"></mapping>
-			<beans:bean id="OrderIntreceptor" class="com.mycompany.interceptor.OrderInterceptor"></beans:bean>
+			<beans:bean id="OrderInterceptor" class="com.mycompany.interceptor.OrderInterceptor"></beans:bean>
 		</interceptor>
 			
 	</interceptors> 
