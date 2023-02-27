@@ -74,7 +74,7 @@
 	</c:if>
 	
 	
-	<div class= 'border' id='replyDiv'>
+	<div class='border row' id='replyDiv'>
 	
 	</div>
 	
@@ -230,7 +230,7 @@
 		/* `+String((obj.relevel)*5)+` */
 			html+=
 			`
-			<div class='border col-3' style="margin-left:10%;>
+			<div class='ps-3 border col-7 offset-`+String((obj.relevel))+`'>
 			<div
 			id='reply' class='`+obj.relevel+`memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>
 			리플번호: '`+obj.replyId+`'<br />
@@ -246,7 +246,7 @@
 	
 		});//each
 		
-		$('# replyDiv').html(html);
+		$('#replyDiv').html(html);
 		
 	}; //replyHtmlMake
 	
