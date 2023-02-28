@@ -14,7 +14,13 @@ public class MemberVO {
 	private int adminCk;
 	private int money;
 	private int point;
-	
+
+	@Override
+	public String toString() {
+		return "MemberVO [memberMail=" + memberMail + ", memberPw=" + memberPw + ", memberName=" + memberName
+				+ ", memberAddr1=" + memberAddr1 + ", memberAddr2=" + memberAddr2 + ", memberAddr3=" + memberAddr3
+				+ ", adminCk=" + adminCk + ", money=" + money + ", point=" + point + ", date=" + date + "]";
+	}
 	public String getMemberMail() {
 		return memberMail;
 	}

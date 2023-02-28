@@ -15,7 +15,13 @@ public interface CartMapper {
 	/* 카트삭제 */
 	public void cartDelete(int cartId);
 	
-	/* 재고검색 */
-	public int stockSearch(CartDTO dto);
+	/* 카트중복검색 */
+	public int cartDupSearch(CartDTO cd);
+	
+	/* 카트추가(중복) */
+	public int cartAddDup(CartDTO cd);
+	
+	/* 자기카트 상품수검색 */
+	public CartDTO cartCountSearch(CartDTO cd);
 	
 }

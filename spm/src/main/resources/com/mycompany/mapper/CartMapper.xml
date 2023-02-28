@@ -18,7 +18,7 @@
 	<!-- 카트 목록 -->
 	<select id="getCart" resultType="com.mycompany.model.CartDTO">
 	
-		select a.cartId, a.memberMail, a.goodId, a.goodCount, b.goodName, b.goodPrice, b.goodDiscount
+		select a.cartId, a.memberMail, a.goodId, a.goodCount, b.goodName, b.goodPrice, b.goodDiscount, b.goodStock
 		from spm_cart a left join spm_good b on a.goodId = b.goodId
 		where memberMail = #{memberMail} order by a.cartId desc
 	
@@ -30,10 +30,22 @@
 	delete spm_cart where cartId= #{cartId}
 	</delete>
 	
-	<!-- 재고검색  -->
-	<select id="stockSearch" resultType="int">
-	select goodStock from spm_good where goodId= #{goodId}
+	
+	<!-- 카트중복검색 -->
+	<select id="cartDupSearch" resultType="int">
+	select count(*) from spm_cart where memberMail= #{memberMail} and goodId= #{goodId}
 	</select>
+	
+	<!-- 카트추가(중복) -->
+	<update id='cartAddDup'>
+	update spm_cart set goodCount= #{goodCount} where cartId= #{cartId}
+	</update>
+	
+	<!-- 자기카트 상품수검색 -->
+	<select id="cartCountSearch" resultType="com.mycompany.model.CartDTO">
+	select goodCount, cartId from spm_cart where memberMail= #{memberMail} and goodId= #{goodId}
+	</select>
+	
 	
 	
 

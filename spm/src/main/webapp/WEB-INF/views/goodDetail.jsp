@@ -27,12 +27,44 @@
 <body>
 
 	<%@include file="./includes/header.jsp" %>
-
-	<br /><br />
-	<div class="imageWrap" goodId="${good.imageList[0].goodId}"
+	<div class='container'>	
+	<div class='row'>
+	<div class="imageWrap col-4" goodId="${good.imageList[0].goodId}"
 	 path="${good.imageList[0].uploadPath}"
 	 uuid="${good.imageList[0].uuid}" fileName="${good.imageList[0].fileName}">
-	<img></div>			
+	<img class='img-fluid' alt="Responsive image">		
+	</div>
+	<div class='form-group col-8'><p></p>
+	 
+	<div class="form-group col-sm-3">
+        <div class="input-group"> <span class="input-group-addon">가격</span>
+            <input id='salePriceInput' type="text" class="form-control" readonly='readonly' value='${oid.salePrice}' data-saleprice='${oid.salePrice}'/>
+        </div>                                                                                              
+    </div>
+	 
+	 <div class="center">
+	<p></p>
+	 <div class="input-group">
+	     <span class="input-group-btn">
+	     <button type="button" class="btn btn-outline-primary btn-number"  data-type="minus" data-field="quant[2]">
+	     <span class="glyphicon glyphicon-minus"></span>
+	     </button>
+	 </span>
+	 <input type="text" name="quant[2]" class="form-control input-number" value="1" min="1" max="${good.goodStock}">
+	  <span class="input-group-btn">
+	  <button type="button" class="btn btn-outline-primary btn-number" data-type="plus" data-field="quant[2]">
+	     <span class="glyphicon glyphicon-plus"></span>
+	 </button>
+	 </span>
+	     </div>
+	<p></p>
+	</div>
+
+	</div>
+	  
+	</div>
+	</div>
+	</div>
 	
 	<table class='table' id='goodTable'>
 	<thead>
@@ -68,10 +100,11 @@
 	<div>
 	<button class='btn btn-outline-success' id='cartBtn'>카트에담기</button>
 	<button class='btn btn-outline-success' id='buyBtn'>바로구매</button>
-	</div>
 	<c:if test='${member != null}'>
 	<button class='btn btn-outline-info' id='replyBtn'>리뷰작성</button><br /><br />
 	</c:if>
+	</div>
+	
 	
 	
 	<div class='border row' id='replyDiv'>
@@ -147,7 +180,7 @@
 	
 	
 	
-	var quantity= $('#quantityInput').val() ;
+	 var quantity= $('#quantityInput').val() ;
 	$('#plusBtn').click(function(){
 		
 		$('#quantityInput').val(++quantity)
@@ -158,14 +191,13 @@
 	if(quantity > 1){
 		$("#quantityInput").val(--quantity);	
 		}
-	});
+	}); 
 	
 	
 
 	$(document).on('ready',function(){
 
 		replyHtmlInit();
-	
 	});
 	
 
@@ -228,18 +260,42 @@
 		
 		$.each(result, function(i, obj){
 		/* `+String((obj.relevel)*5)+` */
-			html+=
-			`
+			html+=` 
 			<div class='ps-3 border col-7 offset-`+String((obj.relevel))+`'>
-			<div
-			id='reply' class='`+obj.relevel+`memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>
-			리플번호: '`+obj.replyId+`'<br />
-			작성자: '`+obj.memberMail+`' <br />
-			작성일: '`+obj.regDate+`' <br />
-			평점: '`+obj.rating+`' <br />
-			리레벨: '`+obj.relevel+`'<br />
-			`+obj.replyContent+`<br />
+			<div id='reply' class='`+obj.relevel+`' memberMail= '`+obj.memberMail+`' replyId='`+obj.replyId+`' rating='`+obj.rating+`' replyContent='`+obj.replyContent+`'>
+	
+	<form class="form-inline" role="form">
+	<div class="row">`
+	if(obj.relevel==0){
+				html+= `
+    <div class="form-group col-sm-3">
+        <div class="input-group"> <span class="input-group-addon">평점</span>
+            <input type="text" class="form-control" readonly='readonly' value= '`+obj.rating+`' />
+        </div>
+    </div>
+		`}
+		html+=`
+    <div class="form-group col-sm-3">
+        <div class="input-group"> <span class="input-group-addon">작성자</span>
+            <input type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+        </div>
+    </div>
+    <div class="form-group col-sm-3">
+        <div class="input-group"> <span class="input-group-addon">작성일</span>
+            <input type="text" class="form-control" readonly='readonly' value= '`+obj.regDate+`' />
+        </div>
+    </div>
+    	<div class="form-group col-sm-12 mt-3">
+    	<div class='input-group'>
+      		<textarea readonly="readonly" class="form-control">`+obj.replyContent+`</textarea>
+ 		</div>
+      	</div>
+  </div> </form>
+
+			
 			<button type='button' class='btn btn-outline-primary' id='modBtn'>수정</button><button class='btn btn-outline-danger' id='delBtn'>삭제</button> <button class='btn btn-outline-info' id='repBtn'>댓글달기</button>
+			
+			
 			</div>
 			</div>
 			`
@@ -282,7 +338,6 @@
 				ntReplyId: ntReplyId,
 				goodId: ${good.goodId}
 		}
-		
 		if( $(this).parent().attr('memberMail')== sessionMemberMail ){
 		$.ajax({
 				url : '/replyDelete',
@@ -318,7 +373,7 @@
 		else{alert('작성자가 아닙니다')}
 		
 		
-	}); //delBtn
+	}); 
 	
 	
 	/* 리리플 */
@@ -381,9 +436,9 @@
 		
 		let form={
 			goodId: ${good.goodId},
-			memberMail:  sessionMemberMail,
-			goodCount: $('#quantityInput').val()
-			
+			memberMail: sessionMemberMail,
+			goodCount: $('.input-number').val(),
+			goodStock: $('.input-number').attr('max')
 		}
 		
 		$.ajax({
@@ -394,12 +449,7 @@
 				contentType : "application/json;charset=UTF-8",
 				dataType : 'json',
 				success : function(result) {
-					if(result==1)
 					alert("카트에 추가했습니다");
-					if(result==0)
-					alert('재고부족')
-						
-				
 				},	
 				error : function(x, e) {
 					if (x.status == 0) {
@@ -416,23 +466,87 @@
 						alert('Unknow Error.n' + x.responseText);
 					}
 				}
-			}); //ajax
-		} //else Stock
-	}); //cartBtn
+			}); 
+		} 
+	});
 		
 		
-	
-		/////////
+	$('.btn-number').click(function(e){
+    e.preventDefault();
+    
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            } 
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
 
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+$('.input-number').focusin(function(){
+   $(this).data('oldValue', $(this).val());
+});
+$('.input-number').change(function() {
+    
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+    
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('1보다 작은값은 입력할수없습니다');
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('재고가 부족합니다');
+        $(this).val($(this).data('oldValue'));
+    }
+    
+    let count= $('.input-number').val(); 
+    $('#salePriceInput').val($('#salePriceInput').data('saleprice')*count );
+    
+    
+});
+$(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) || 
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
 	
-		
-	
-	
-		
-		
-	
-	
-	
+
 	
 	</script>
 	

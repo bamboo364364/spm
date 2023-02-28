@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.mycompany.model.AttachImageVO;
 import com.mycompany.model.Criteria;
 import com.mycompany.model.GoodVO;
+import com.mycompany.model.OrderItemDTO;
 import com.mycompany.model.PageDTO;
 import com.mycompany.model.ReplyDTO;
 import com.mycompany.service.AdminService;
@@ -113,7 +114,12 @@ public class GoodController {
 	ReplyDTO dto= new ReplyDTO();
 	dto.setGoodId(goodId);
 	model.addAttribute("pageMaker", new PageDTO(cri, replyService.replyGetTotal(dto)));
-	logger.info(dto.toString());
+	
+	OrderItemDTO oid= new OrderItemDTO();
+	oid.setGoodPrice(good.getGoodPrice());
+	oid.setGoodDiscount(good.getGoodDiscount());
+	oid.initSaleTotal();
+	model.addAttribute("oid", oid);
 	return "/goodDetail";	
 	
 	

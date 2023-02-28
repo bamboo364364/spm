@@ -39,7 +39,7 @@
   				<option value="P">가격순</option>
   				<option value="S">재고순</option>
   				</select>
-      			<input class='form-control' type="text" name="keyword" value='${pageMaker.cri.keyword}'>
+      			<input class='form-control' type="text" name="keyword" placeholder='상품이름' value='${pageMaker.cri.keyword}'>
       			<input type="hidden" name="pageNum" value='1'>
       			<input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
       			<button class='btn btn-outline-primary search_btn'>검 색</button>                				

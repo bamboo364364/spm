@@ -123,15 +123,15 @@
 	
 	<!-- 검색 영역 -->
   
-  		<form id="searchForm">
+  		<form id="searchForm" class='form-inline'>
   			<div id='searchDiv'">
-  				<select name="type" id="type">
+  				<select class='form-select' name="type" id="type">
   				<option value="D">등록일자순</option>
   				<option value="C">카테고리정렬</option>
   				<option value="P">가격순</option>
   				<option value="S">재고순</option>
   				</select>
-      			<input type="text" name="keyword" value='${pageMaker.cri.keyword}'>
+      			<input class='form-control' type="text" name="keyword" value='${pageMaker.cri.keyword}'>
       			<input type="hidden" name="pageNum" value='1'>
       			<input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
       			<button class='btn btn-outline-primary search_btn'>검 색</button>                				

@@ -11,6 +11,16 @@ public class ReplyDTO {
 	private int goodId;
 	
 	private String memberMail;
+	
+	private String memberName;
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
 
 	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
 	private Date regDate;
@@ -23,8 +33,6 @@ public class ReplyDTO {
 	
 	//삭제시사용, 선택 replyId다음 동 레벨리플의 replyId
 	private int ntReplyId;
-
-
 
 
 	public int getNtReplyId() {
@@ -93,9 +101,9 @@ public class ReplyDTO {
 
 	@Override
 	public String toString() {
-		return "ReplyDTO [replyId=" + replyId + ", goodId=" + goodId + ", memberMail=" + memberMail + ", regDate="
-				+ regDate + ", replyContent=" + replyContent + ", rating=" + rating + ", relevel=" + relevel
-				+ ", ntReplyId=" + ntReplyId + "]";
+		return "ReplyDTO [replyId=" + replyId + ", goodId=" + goodId + ", memberMail=" + memberMail + ", memberName="
+				+ memberName + ", regDate=" + regDate + ", replyContent=" + replyContent + ", rating=" + rating
+				+ ", relevel=" + relevel + ", ntReplyId=" + ntReplyId + "]";
 	}	
 	
 	

@@ -86,22 +86,22 @@ private ReplyMapper replyMapper;
 	List<ReplyDTO>dDtoL= replyMapper.replySearches(dto);
 	
 	double avg= replyMapper.ratingAvgGet(dto.getGoodId());
-	logger.info("//////////////avg"+ avg);
+
 	int repTotal= replyMapper.rootReplyGetTotal(dto);
-	logger.info("repTotal"+ repTotal);
+	
 	double avgRt= avg* repTotal;
-	logger.info("avgRt"+ avgRt);
+	
 	double dAvg= 0.0;
 	
 	for(ReplyDTO dDto: dDtoL){
 		dAvg+= dDto.getRating();
-		logger.info("dAvg"+ dAvg);
+		
 	}
-	logger.info("dDtoL.size"+ dDtoL.size());
+	
 	double rAvg=0.0;
 	if( repTotal- dDtoL.size()== 0 ){rAvg= 0.0;}else{
 	rAvg= (avgRt- dAvg)/(repTotal- dDtoL.size()); }//else
-	logger.info("rAvg"+ rAvg);
+	
 	GoodVO gv= new GoodVO();
 	gv.setGoodId(dto.getGoodId());
 	gv.setRatingAvg(rAvg);

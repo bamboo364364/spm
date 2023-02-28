@@ -26,7 +26,7 @@ private int point;
 
 private int totalPoint;
 
-//카트에서 재고확인
+
 private int goodStock;
 
 public int getGoodStock() {

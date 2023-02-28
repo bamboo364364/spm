@@ -5,70 +5,37 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- bootStrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
 <meta charset="UTF-8">
 <title>cartView</title>
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
-<script src="https://code.jquery.com/jquery-3.4.1.js"
-	integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-	crossorigin="anonymous">
-	
-</script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+
 <style>
-h1, #upNav {
-	display: inline;
-}
-
-#upNav, #CalDiv {
-	float: right; background-color: red;
-}
-
-#listDiv{
-	clear: both;
-	width: 60%;
-}
-
-#cartListTable{
-	width: 90%;
-}
 
 </style>
 </head>
 <body>
-	<a href="/"><h1>쇼핑몰</h1></a>
-	<h2>카트</h2>
-	
-	
-	<div id="upNav">
-		<c:if test="${member==null}">
-		<a href="/member/join">회원가입</a> <a href="/member/login">로그인</a>
-		</c:if>
-		<c:if test="${member!=null}">
-			<c:if test="${member.adminCk==1}">
-			<a href="/admin/goodManage">관리자페이지</a> 
-			</c:if>
-			<a id="logout">로그아웃</a> <a href="/member/admin/myroom/${member.memberMail}">마이룸</a>
-			<a href="/cart/${member.memberMail}?">카트</a><br />
-			<span style='color:red;' >${member.memberName}</span>
-			<span>충전금액<fmt:formatNumber value="${member.money}" pattern="\#,###.##"/></span>
-			<span>포인트<fmt:formatNumber value="${member.point}" pattern="\#,###.##"/></span>
-			
-		</c:if>
-	</div>
 
+	<%@include file="../includes/header.jsp" %>
 	
   	<div id='listDiv'>
-  		<!-- 카트리스트 -->
-  		<c:choose> 
+  	<c:choose> 
 	<c:when test="${cartInfo == 'empty'}">
 <div>등록된 상품이 없습니다</div>
 	</c:when> 
 	<c:otherwise> 
 	<div>
-	
-		<table id='cartListTable'>
+	<table class='table' id='cartListTable'>
 	<colgroup>
     <col width="20%" />
     <col width="20%" />
@@ -77,27 +44,22 @@ h1, #upNav {
   	</colgroup>
 	<thead>
 		<tr>
-			<th>전체선택 <input type="checkbox" class='selectAll'/></th>
-			<th></th>
-			<th>카트번호</th>
-			<th>상품이름</th>
-			<th>상품수량</th>
-			<th>상품가격</th>
-			<th></th>
+			<th scope='col'>전체선택<p></p><input type="checkbox" class='selectAll form-check-input'/></th>
+			<th scope='col'></th>
+			<th scope='col'>상품이름</th>
+			<th scope='col'>상품재고</th>
+			<th scope='col'>상품수량</th>
+			<th scope='col'>상품가격</th>
+			<th scope='col'></th>
 		</tr>
 	</thead>
-		<c:forEach items='${cartInfo}' var='list'>  <!-- cartId memberMail goodId goodCount goodName
-		goodPrice goodDiscount -->
+	<c:forEach items='${cartInfo}' var='list'>  
 		<tr>
 			<td class='infoTd'>
-			<input type="checkbox" class='checkbox' checked="checked"/>
+			<input type="checkbox" class='checkbox form-check-input' checked="checked"/>
 			<input type="hidden" id='goodPrice' value='${list.goodPrice}'/>
 			<input type="hidden" id='salePrice' value='${list.salePrice}'/>
-			<input type="hidden" id='goodCount' value='${list.goodCount}'/>
-			<input type="hidden" id='totalPriceB' value='${list.goodPrice * list.goodCount}'/>
-			<input type="hidden" id='totalPrice' value='${list.salePrice * list.goodCount}'/>
 			<input type="hidden" id='point' value='${list.point}'/>
-			<input type="hidden" id='totalPoint' value='${list.totalPoint}'/>
 			<input type="hidden" id='goodId' value='${list.goodId}'/>
 			</td>
 			
@@ -105,19 +67,36 @@ h1, #upNav {
 			<div class='imageWrap' goodId='${list.imageList[0].goodId}' path="${list.imageList[0].uploadPath}"
 	 		uuid="${list.imageList[0].uuid}" fileName="${list.imageList[0].fileName}">
 	 		<img>
-	 		
 	 		</div>
 	 		</td>
-	 		
+			<td><input class='form-control' type="text" readonly="readonly" value= "<c:out value='${list.goodName}'></c:out>"/></td>
+			<td class='goodStockTd'><input class='form-control' type="text" readonly="readonly" value= "<c:out value='${list.goodStock}'></c:out>"/></td>
 			
-			<td><c:out value='${list.cartId}'></c:out></td>
-			<td> <a href="/goodDetail/${list.goodId}"> <c:out value='${list.goodName}'></c:out> </a> </td>
-			<td><c:out value='${list.goodCount}'></c:out></td>
-			<td><c:out value='${list.goodPrice}'></c:out></td>
-			<td><button class='delBtn' cartId='${list.cartId}' >삭제</button></td>
+			<td class='countTd'>
+			<div class="center">
+				<p></p>
+	     		<div class="input-group">
+		          	<span class="input-group-btn">
+		            <button type="button" class="btn btn-outline-primary btn-number"  data-type="minus" data-field="quant[2]">
+		            <span class="glyphicon glyphicon-minus"></span>
+		            </button>
+		            </span>                                                                                
+		            <input type="text" name="quant[2]" class="form-control input-number" value='${list.goodCount}' min="1" max="${list.goodStock+ list.goodCount}">
+		            <span class="input-group-btn">
+		            <button type="button" class="btn btn-outline-primary btn-number" data-type="plus" data-field="quant[2]">
+		            <span class="glyphicon glyphicon-plus"></span>
+		            </button>
+		            </span>
+	            </div>
+		        <p></p>
+            </div>
+			</td>
+			
+			<td><input class='form-control' type="text" readonly="readonly" value= "<c:out value='${list.goodPrice}'></c:out>"/></td>
+			<td><button class='delBtn btn btn-outline-danger' cartId='${list.cartId}' >삭제</button></td>
 			
 		</tr>
-		</c:forEach>
+	</c:forEach>
 		</table>
 	</div>
 		
@@ -126,22 +105,36 @@ h1, #upNav {
 	</c:otherwise> 
 </c:choose>  
   		
-  	</div>	<!-- listDiv -->
+  	</div>
   	
-  	<div id="CalDiv">
-  	<p id='totalPriceP'></p>
-  	
-  	<p id='deliveryPriceP'></p>
-  	
-  	<p id='totalCountP'></p>
-  	
-  	<p id='finalTotalPriceP'></p>
-  	
-  	<p id='totalPointP'></p>
-  	
-  	
-  	<button class='orderBtn'>주문페이지로</button>
-  	
+   <div id="CalDiv" class='border px-3 py-3 col-7 offset-6'>
+	  	<div class="form-group col-8">
+	    	<div class="input-group"> <span class="input-group-addon">가격합계</span>
+	        <input id='totalPriceP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        </div>
+	   	</div>
+	  	<div class="form-group col-8">
+	    	<div class="input-group"> <span class="input-group-addon">수량합계</span>
+	        <input id='totalCountP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        </div>
+	   	</div>
+	  	<div class="form-group col-8">
+	    	<div class="input-group"> <span class="input-group-addon">배송비</span>
+	        <input id='deliveryPriceP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        </div>
+	   	</div>
+	  	<div class="form-group col-8">
+	    	<div class="input-group"> <span class="input-group-addon">결제금액</span>
+	        <input id='finalTotalPriceP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        </div>
+	   	</div>
+	  	<div class="form-group col-8">
+	    	<div class="input-group"> <span class="input-group-addon">예상적립포인트</span>
+	        <input id='totalPointP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        </div>
+	   	</div>
+
+	  	<button class='orderBtn btn btn-outline-success'>주문페이지로</button>
   	
   	</div>
   	
@@ -149,6 +142,9 @@ h1, #upNav {
 				<form action="/cart/delete" method="post" class="delForm">
 					<input type="hidden" name="cartId" class="delFormCartId">
 					<input type="hidden" name="memberMail" value="${member.memberMail}">
+					<input type="hidden" name="goodStock" class='delFormGoodStock'>
+					<input type="hidden" name="goodCount" class='delFormGoodCount'>
+					<input type="hidden" name="goodId" class='delFormGoodId'>
 				</form>
 				
 	<!-- 주문 form -->
@@ -218,11 +214,8 @@ h1, #upNav {
 			}
 		
 		setTotalInfo('.infoTd');
-	}); //checkbox
-	
-	
-	
-	
+	}); 
+
 	
 	 /* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
 function setTotalInfo(){
@@ -271,16 +264,22 @@ function setTotalInfo(){
 	$("#deliveryPriceP").text('배송비: '+ deliveryPrice);	
 	// 최종 가격(총 가격 + 배송비)
 	$("#finalTotalPriceP").text('총결제 예상금액: '+ finalTotalPrice.toLocaleString());		
-} //setTotalInfo
+} 
 
+	
 
 	$('.delBtn').click(function(){
 		let cartId= $(this).attr('cartId');
-	
+		let goodCount= $(this).parent().siblings('.infoTd').find('#goodCount').val();
+		let goodId= $(this).parent().siblings('.infoTd').find('#goodId').val();
+		let goodStock= $(this).parent().siblings('.countTd').find('.input-number').attr('max');
+		$('.delFormGoodCount').val(goodCount);
+		$('.delFormGoodStock').val(goodStock);
+		$('.delFormGoodId').val(goodId);
 		$('.delFormCartId').val(cartId);
 		$('.delForm').submit();
 
-	}); //delBtn
+	});
 	
 	
 	
@@ -299,10 +298,6 @@ $(".orderBtn").on("click", function(){
 	
 		
 	  
-			
-		  
-			 
-				
 
 	let formContents ='';
 	let orderNumber = 0;
@@ -332,9 +327,82 @@ $(".orderBtn").on("click", function(){
 	
 	
 	
-}); //orderBtn
-		
-		
+});
+	
+	
+	$('.btn-number').click(function(e){
+    e.preventDefault();
+    
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            } 
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+$('.input-number').focusin(function(){
+   $(this).data('oldValue', $(this).val());
+});
+$('.input-number').change(function() {
+    
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+    
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('1보다 작은값은 입력할수없습니다');
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('재고가 부족합니다');
+        $(this).val($(this).data('oldValue'));
+    }
+    
+   	let existStock= $(this).attr('max');
+   	$(this).parents('.countTd').prevAll('.goodStockTd').children('input').val(existStock-$(this).val());
+ 
+});
+$(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) || 
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });	
 	
 	
 

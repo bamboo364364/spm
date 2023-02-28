@@ -7,12 +7,15 @@ import com.mycompany.model.CartDTO;
 public interface CartService {
 
 /* 카트추가 */
-	public int addCart(CartDTO dto);
+	public void addCart(CartDTO dto);
 	
 	/* 카트리스트 */
 	public List<CartDTO> getCart(String memberMail);
 	
 	/* 카트삭제 */
-	public void cartDelete(int cartId);
-
+	public void cartDelete(CartDTO cd);
+	
+	/* 카트중복검색 */
+	public int cartDupSearch(CartDTO cd);
+	
 }

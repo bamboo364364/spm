@@ -43,9 +43,11 @@ public class CartController {
 
 	@PostMapping("/add")
 	@ResponseBody
-	public int addCartPOST(@RequestBody CartDTO dto) {
+	public void addCartPOST(@RequestBody CartDTO dto) {
 		logger.info(dto.toString());
-		return cartService.addCart(dto);
+		if (cartService.cartDupSearch(dto) > 0) {
+		}
+		cartService.addCart(dto);
 
 	}
 
@@ -74,21 +76,9 @@ public class CartController {
 	/* 카트삭제 */
 	@PostMapping("/delete")
 	public String delete(CartDTO dto) {
-	logger.info("카트삭제메서드 진입");
-		cartService.cartDelete(dto.getCartId());
-		return "redirect:/cart/cartView?memberMail="+dto.getMemberMail();
+		logger.info("카트삭제메서드 진입");
+		cartService.cartDelete(dto);
+		return "redirect:/cart/cartView?memberMail=" + dto.getMemberMail();
 	}
-	
-	/*
-	 * 장바구니 수량 수정
-	 * 
-	 * @PostMapping("/cart/delete") public String deleteCartPOST(CartDTO cart) {
-	 * 
-	 * cartService.deleteCart(cart.getCartId());
-	 * 
-	 * return "redirect:/cart/" + cart.getMemberId();
-	 * 
-	 * }
-	 */
 
 }// class
