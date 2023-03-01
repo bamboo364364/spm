@@ -26,12 +26,10 @@
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 
 
-
 </head>
 <body>
 	<h1><a href="/">쇼핑몰</a></h1>
 	<div id="nav" align="right" >
-		<a class='mx-4' href="/">홈페이지</a>
 		<c:if test="${member==null}">
 		<a class='mx-4' href="/member/join">회원가입</a> <a class='mx-4' href="/member/login">로그인</a>
 		</c:if>
@@ -53,22 +51,9 @@
 	
 	
 
-	
-
-	 
 
 
-		
-		
-
 	
-		
-
-	
-	<script>
-	
-	
-	</script>
 
 
 </body>

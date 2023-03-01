@@ -30,15 +30,10 @@
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 
 
-
-
-
-
-
 </head>
 <body>
 
-	<p>상품관리페이지입니다</p>
+	
 
 	<%@include file="../includes/adminHeader.jsp" %>
 	

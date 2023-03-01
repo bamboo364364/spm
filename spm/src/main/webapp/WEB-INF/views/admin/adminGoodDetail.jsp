@@ -63,7 +63,7 @@
 			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodMaker}'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<fmt:formatDate value='${good.regDate}' pattern='yyyy-MM-dd HH:ss'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.ratingAvg}'/>"/></td>
-			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodDiscount}'/>"/></td>
+			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodDiscount*100}%'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<fmt:formatNumber value='${good.goodPrice}' pattern='#,###'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodStock}'/>"/></td>
 		</tr>
@@ -72,7 +72,7 @@
 
 			
   <b>상품상세</b>
-  <textarea readonly="readonly" class="form-control">${good.goodContents}</textarea>
+  <textarea rows='16' readonly="readonly" class="form-control">${good.goodContents}</textarea>
 	
 	
 	

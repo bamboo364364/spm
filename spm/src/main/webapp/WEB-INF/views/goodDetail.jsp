@@ -74,7 +74,7 @@
 			<th scope='col'>상품메이커</th>
 			<th scope='col'>등록일자</th>
 			<th scope='col'>평점</th>
-			<th scope='col'>상품할인</th>
+			<th scope='col'>상품할인률</th>
 			<th scope='col'>상품가격</th>
 			<th scope='col'>상품재고</th>
 			
@@ -87,7 +87,7 @@
 			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodMaker}'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<fmt:formatDate value='${good.regDate}' pattern='yyyy-MM-dd HH:ss'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.ratingAvg}'/>"/></td>
-			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodDiscount}'/>"/></td>
+			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodDiscount*100}%'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<fmt:formatNumber value='${good.goodPrice}' pattern='#,###'/>"/></td>
 			<td><input class="form-control" readonly="readonly" type="text" value="<c:out value='${good.goodStock}'/>"/></td>
 		</tr>
@@ -95,7 +95,7 @@
 	</table>
 	
 	<b>상품상세</b>
-  <textarea readonly="readonly" class="form-control">${good.goodContents}</textarea>
+  <textarea rows='16' readonly="readonly" class="form-control">${good.goodContents}</textarea>
 	
 	<div>
 	<button class='btn btn-outline-success' id='cartBtn'>카트에담기</button>

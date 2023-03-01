@@ -25,7 +25,6 @@
 </style>
 </head>
 <body>
-	<p>상품 등록페이지입니다</p>
 		<%@include file="../includes/adminHeader.jsp" %>
 		
 	<div class="imageWrap"> 

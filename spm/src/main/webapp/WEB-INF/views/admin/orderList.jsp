@@ -16,7 +16,6 @@
 </style>
 </head>
 <body>
-	<p>관리자페이지입니다</p>
 
 	<%@include file="../includes/adminHeader.jsp" %>
 	

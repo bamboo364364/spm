@@ -25,7 +25,12 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 
-
+<style>
+.nav > a{
+  margin-left:30px;
+  margin-right:30px;
+}
+</style>
 
 </head>
 <body>
@@ -35,33 +40,17 @@
 	</div>
 			
 	
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active"  aria-current="page" href="/admin/goodManage">상품관리</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/admin/goodEnroll">상품등록</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href='/admin/memberManage'>회원관리</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/admin/orderList">주문관리</a>
-        </li>
-      </ul>
-      <!-- <span class="navbar-text">
-        Navbar text with an inline element
-      </span> -->
-    </div>
-  </div>
-</nav>
 
+<div class='d-flex justify-content-start'>
+	<nav class="nav nav-pills nav-fill ">
 	
+  <a class="nav-item nav-link" href="/admin/goodManage">상품관리</a>
+  <a class="nav-item nav-link" href="/admin/goodEnroll">상품등록</a>
+  <a class="nav-item nav-link" href='/admin/memberManage'>회원관리</a>
+  <a class="nav-item nav-link" href="/admin/orderList">주문관리</a>
 
+	</nav>
+</div>
 	 
 
 
@@ -71,9 +60,11 @@
 	
 		
 
-	
 	<script>
-	
+	$(document).ready(function(){ 
+		let path= (window.location.href).substr(16);
+	$('.nav').find('a[href="'+path+'"]').attr('class','nav-item nav-link active');
+	});
 	
 	</script>
 

@@ -435,3 +435,41 @@
 
 </body>
 </html>
+/////
+
+
+
+<div class='d-flex justify-content-end'>
+	<nav class="nav nav-pills nav-fill ">
+	<c:if test="${member==null}">
+	<a class="nav-item nav-link" href="/member/join">회원가입</a>
+	<a class="nav-item nav-link" href="/member/login">로그인</a>
+	</c:if>
+	<c:if test='${member!=null}'>
+		<c:if test='${member.adminCk==1}'>
+		<a class="nav-item nav-link" href="/admin/goodManage">관리자페이지</a>
+		</c:if>
+			  <a class="nav-item nav-link" href="/member/admin/myroom?memberMail=${member.memberMail}">마이룸</a>
+			  <a class="nav-item nav-link" href="/cart/cartView?memberMail=${member.memberMail}">카트</a>
+			  <a id='logout' class="nav-item nav-link" href="/s">로그아웃</a>
+	</c:if>
+
+</nav>
+</div>
+
+
+
+
+
+<script>
+	$(document).ready(function(){ 
+		let path= (window.location.href).substr(16);
+	alert(path);
+	$('.nav').find('a[href="'+path+'"]').attr('class','nav-item nav-link active');
+	});
+	
+	</script>
+
+
+
+

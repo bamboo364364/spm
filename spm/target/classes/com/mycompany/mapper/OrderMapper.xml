@@ -8,7 +8,7 @@
 <!-- 주문 상품 정보 -->
 	<select id="getGoodsInfo" resultType="com.mycompany.model.OrderPageItemDTO">
 	
-		select goodId, goodName, goodPrice, goodDiscount, goodStock
+		select goodId, goodName, goodPrice, goodDiscount
 		from spm_good where goodId = #{goodId}	
 	
 	</select>

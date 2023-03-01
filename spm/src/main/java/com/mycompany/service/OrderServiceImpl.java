@@ -41,22 +41,20 @@ private OrderMapper orderMapper;
 @Override
 	public List<OrderPageItemDTO> getGoodsInfo(List<OrderPageItemDTO> orders){
 	
-	
 		List<OrderPageItemDTO> result = new ArrayList<OrderPageItemDTO>();
 
 		for (OrderPageItemDTO ord : orders) {
+			
+			orderMapper.getGoodsInfo(ord.getGoodId());
+			
+			
+			ord.initSaleTotal();
 
-			OrderPageItemDTO goodsInfo = orderMapper.getGoodsInfo(ord.getGoodId());
+			List<AttachImageVO> imageList = attachMapper.getAttachList(ord.getGoodId());
 
-			goodsInfo.setGoodCount(ord.getGoodCount());
+			ord.setImageList(imageList);
 
-			goodsInfo.initSaleTotal();
-
-			List<AttachImageVO> imageList = attachMapper.getAttachList(goodsInfo.getGoodId());
-
-			goodsInfo.setImageList(imageList);
-
-			result.add(goodsInfo);
+			result.add(ord);
 		}
 
 		return result;

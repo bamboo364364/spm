@@ -54,13 +54,12 @@
 		</tr>
 	</thead>
 	<c:forEach items='${cartInfo}' var='list'>  
-		<tr>
-			<td class='infoTd'>
+		<tr class='cartItem'>
+			<td>
 			<input type="checkbox" class='checkbox form-check-input' checked="checked"/>
-			<input type="hidden" id='goodPrice' value='${list.goodPrice}'/>
-			<input type="hidden" id='salePrice' value='${list.salePrice}'/>
 			<input type="hidden" id='point' value='${list.point}'/>
 			<input type="hidden" id='goodId' value='${list.goodId}'/>
+			<input type="hidden" class='goodDiscount' value='${list.goodDiscount}'/>
 			</td>
 			
 			<td>
@@ -69,10 +68,10 @@
 	 		<img>
 	 		</div>
 	 		</td>
-			<td><input class='form-control' type="text" readonly="readonly" value= "<c:out value='${list.goodName}'></c:out>"/></td>
-			<td class='goodStockTd'><input class='form-control' type="text" readonly="readonly" value= "<c:out value='${list.goodStock}'></c:out>"/></td>
+			<td><input class='form-control goodName' type="text" readonly="readonly" value= "<c:out value='${list.goodName}'></c:out>"/></td>
+			<td><input class='form-control goodStock' type="text" readonly="readonly" value= "<c:out value='${list.goodStock}'></c:out>"/></td>
 			
-			<td class='countTd'>
+			<td>
 			<div class="center">
 				<p></p>
 	     		<div class="input-group">
@@ -81,7 +80,7 @@
 		            <span class="glyphicon glyphicon-minus"></span>
 		            </button>
 		            </span>                                                                                
-		            <input type="text" name="quant[2]" class="form-control input-number" value='${list.goodCount}' min="1" max="${list.goodStock+ list.goodCount}">
+		            <input id='quant[2]' type="text" class="form-control input-number" value='${list.goodCount}' min="1" max="${list.goodStock+ list.goodCount}">
 		            <span class="input-group-btn">
 		            <button type="button" class="btn btn-outline-primary btn-number" data-type="plus" data-field="quant[2]">
 		            <span class="glyphicon glyphicon-plus"></span>
@@ -92,7 +91,9 @@
             </div>
 			</td>
 			
-			<td><input class='form-control' type="text" readonly="readonly" value= "<c:out value='${list.goodPrice}'></c:out>"/></td>
+			<td><input data-goodprice='${list.goodPrice}' style="text-decoration: line-through; color: red;" class='form-control goodPrice' type="text" readonly="readonly" value='${list.goodPrice*list.goodCount}'/>
+			<input data-saleprice='${list.salePrice}' class='form-control salePrice' type="text" readonly="readonly" value='${list.salePrice*list.goodCount}'/>
+			</td>
 			<td><button class='delBtn btn btn-outline-danger' cartId='${list.cartId}' >삭제</button></td>
 			
 		</tr>
@@ -110,27 +111,27 @@
    <div id="CalDiv" class='border px-3 py-3 col-7 offset-6'>
 	  	<div class="form-group col-8">
 	    	<div class="input-group"> <span class="input-group-addon">가격합계</span>
-	        <input id='totalPriceP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        <input id='totalPriceInput' type="text" class="form-control" readonly='readonly'/>
 	        </div>
 	   	</div>
 	  	<div class="form-group col-8">
 	    	<div class="input-group"> <span class="input-group-addon">수량합계</span>
-	        <input id='totalCountP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        <input id='totalCountInput' type="text" class="form-control" readonly='readonly' />
 	        </div>
 	   	</div>
 	  	<div class="form-group col-8">
 	    	<div class="input-group"> <span class="input-group-addon">배송비</span>
-	        <input id='deliveryPriceP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        <input id='deliveryPriceInput' type="text" class="form-control" readonly='readonly'/>
 	        </div>
 	   	</div>
 	  	<div class="form-group col-8">
 	    	<div class="input-group"> <span class="input-group-addon">결제금액</span>
-	        <input id='finalTotalPriceP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        <input id='finalTotalPriceInput' type="text" class="form-control" readonly='readonly'/>
 	        </div>
 	   	</div>
 	  	<div class="form-group col-8">
 	    	<div class="input-group"> <span class="input-group-addon">예상적립포인트</span>
-	        <input id='totalPointP' type="text" class="form-control" readonly='readonly' value= '`+obj.memberName+`' />
+	        <input id='totalPointInput' type="text" class="form-control" readonly='readonly'/>
 	        </div>
 	   	</div>
 
@@ -148,8 +149,7 @@
 				</form>
 				
 	<!-- 주문 form -->
-	<form action="/order/orderView" method="get"
-		class="orderForm"></form>
+	<form action="/order/orderView" method="get"class="orderForm"></form>
   	
  
 	
@@ -201,9 +201,8 @@
 		$('.checkbox').prop('checked', true);
 		}else{$('.checkbox').prop('checked', false)
 		}
-			setTotalInfo('.infoTd');
-	}); //selectAll
-	
+			setTotalInfo();
+	}); 
 	$('.checkbox').click(function(){
 		let total= $('.checkbox').length;
 		let checked= $('.checkbox:checked').length;
@@ -213,7 +212,7 @@
 				$('.selectAll').prop('checked', true);
 			}
 		
-		setTotalInfo('.infoTd');
+		setTotalInfo();
 	}); 
 
 	
@@ -227,16 +226,15 @@ function setTotalInfo(){
 	let finalTotalPrice = 0; 		// 최종 가격(총 가격 + 배송비)
 
 	
-	$('.infoTd').each(function(i, e){
+	$('.cartItem').each(function(i, e){
 		
 		if( $(e).find(".checkbox").is(":checked") === true ){	//체크여부
 			// 총 가격 
-			
-			totalPrice += parseInt( $(e).find("#totalPrice").val() );
+			totalPrice += parseInt( $(e).find(".salePrice").val() );
 			// 총 갯수
-			totalCount += parseInt($(e).find("#goodCount").val());
+			totalCount += parseInt($(e).find(".input-number").val());
 			// 총 마일리지
-			totalPoint += parseInt($(e).find("#totalPoint").val());			
+			totalPoint += ($(e).find("#point").val()*$(e).find(".input-number").val());			
 		}
 
 	}); 
@@ -255,24 +253,24 @@ function setTotalInfo(){
 	/* ※ 세자리 컴마 Javscript Number 객체의 toLocaleString() */
 	
 	// 총 가격
-	$("#totalPriceP").text('총 상품가격: '+ totalPrice.toLocaleString() );
+	$("#totalPriceInput").val('총 상품가격: '+ totalPrice.toLocaleString() );
 	// 총 갯수
-	$("#totalCountP").text('총상품 수: '+ totalCount);
+	$("#totalCountInput").val('총상품 수: '+ totalCount);
 	// 총 마일리지
-	$("#totalPointP").text('적립 예상포인트: '+ totalPoint.toLocaleString());
+	$("#totalPointInput").val('적립 예상포인트: '+ totalPoint.toLocaleString());
 	// 배송비
-	$("#deliveryPriceP").text('배송비: '+ deliveryPrice);	
+	$("#deliveryPriceInput").val('배송비: '+ deliveryPrice);	
 	// 최종 가격(총 가격 + 배송비)
-	$("#finalTotalPriceP").text('총결제 예상금액: '+ finalTotalPrice.toLocaleString());		
+	$("#finalTotalPriceInput").val('총결제 예상금액: '+ finalTotalPrice.toLocaleString());		
 } 
 
 	
 
 	$('.delBtn').click(function(){
 		let cartId= $(this).attr('cartId');
-		let goodCount= $(this).parent().siblings('.infoTd').find('#goodCount').val();
-		let goodId= $(this).parent().siblings('.infoTd').find('#goodId').val();
-		let goodStock= $(this).parent().siblings('.countTd').find('.input-number').attr('max');
+		let goodCount= $(this).parents('.cartItem').find('.input-number').val();
+		let goodId= $(this).parents('.cartItem').find('#goodId').val();
+		let goodStock= $(this).parents('.cartItem').find('.goodStock').val();
 		$('.delFormGoodCount').val(goodCount);
 		$('.delFormGoodStock').val(goodStock);
 		$('.delFormGoodId').val(goodId);
@@ -292,42 +290,53 @@ $(".orderBtn").on("click", function(){
 	 const sEN= selectedElements.length;
 	 
 	 if(sEN== 0){
-	 	alert("상품x");
+	 	alert("아무상품도 선택되지않았습니다.");
 		return;
 	 	}  
 	
-		
-	  
 
-	let formContents ='';
-	let orderNumber = 0;
 	
-	formContents+= "<input type='hidden' name='memberMail' value='"+sessionMemberMail+"'>";
 	
-	$(".infoTd").each(function(index, element){
+	
+	
+	$(".cartItem").each(function(i, e){
 		
-		if($(element).find(".checkbox").is(":checked") === true){	//체크여부
+		if($(e).find(".checkbox").is(":checked") === true){
 			
-			let goodId = $(element).find("#goodId").val();
-			let goodCount = $(element).find("#goodCount").val();
+			let goodId = $(e).find("#goodId").val();
+			let goodCount = $(e).find(".input-number").val();
+			let goodStock = $(e).find(".goodStock").val();
+			let goodName = $(e).find(".goodName").val();
+			let goodPrice = $(e).find(".goodPrice").data('goodprice');
+/* 			let goodDiscount = $(e).find(".goodDiscount").val();
+ */			let salePrice = $(e).find(".salePrice").data('saleprice');
+			let point = $(e).find("#point").val();
 			
-			let goodIdInput = "<input name='orders[" + orderNumber + "].goodId' type='hidden' value='" + goodId + "'>";
-			formContents += goodIdInput;
-			
-			let goodCountInput = "<input name='orders[" + orderNumber + "].goodCount' type='hidden' value='" + goodCount + "'>";
-			formContents += goodCountInput;
-			
-			orderNumber += 1;
-			
+			var formContents ='';
+		
+			var inputMaker= function(i,c){
+				formContents+="<input name='orders[" + i + "]."+ Object.keys(c)[0] +"' type='hidden' value='" + Object.values(c)[0] + "'>";
+			} 
+					
+			inputMaker(i,{goodId});
+			inputMaker(i,{goodCount});
+			inputMaker(i,{goodStock});
+			inputMaker(i,{goodName});
+			inputMaker(i,{goodPrice});
+			inputMaker(i,{salePrice});
+			inputMaker(i,{point});
+
 		}
-	});	
+		
+		formContents+= "<input type='hidden' name='memberMail' value='"+sessionMemberMail+"'>";
 
-	$(".orderForm").html(formContents);
-	$(".orderForm").submit();
+		$(".orderForm").html(formContents); 
+
+		 $(".orderForm").submit();  
 	
 	
-	
-});
+		}); 
+	});
 	
 	
 	$('.btn-number').click(function(e){
@@ -335,7 +344,7 @@ $(".orderBtn").on("click", function(){
     
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
+    var input = $(this).parent().siblings('.input-number');
     var currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
@@ -346,6 +355,9 @@ $(".orderBtn").on("click", function(){
             if(parseInt(input.val()) == input.attr('min')) {
                 $(this).attr('disabled', true);
             }
+            if(parseInt(input.val()) < input.attr('max')) {
+                $(this).attr('disabled', false);
+            }
 
         } else if(type == 'plus') {
 
@@ -354,6 +366,9 @@ $(".orderBtn").on("click", function(){
             }
             if(parseInt(input.val()) == input.attr('max')) {
                 $(this).attr('disabled', true);
+            }
+            if(parseInt(input.val()) > input.attr('min')) {
+                $(this).attr('disabled', false);
             }
 
         }
@@ -385,7 +400,14 @@ $('.input-number').change(function() {
     }
     
    	let existStock= $(this).attr('max');
-   	$(this).parents('.countTd').prevAll('.goodStockTd').children('input').val(existStock-$(this).val());
+   	$(this).parents('.cartItem').find('.goodStock').val(existStock-$(this).val());
+   	let goodPriceInput= $(this).parents('.cartItem').find('.goodPrice');
+   	let salePriceInput= $(this).parents('.cartItem').find('.salePrice');
+   	goodPriceInput.val($(this).val()*goodPriceInput.data('goodprice'));
+   	salePriceInput.val($(this).val()*salePriceInput.data('saleprice'));
+   	setTotalInfo();
+   	
+   	
  
 });
 $(".input-number").keydown(function (e) {

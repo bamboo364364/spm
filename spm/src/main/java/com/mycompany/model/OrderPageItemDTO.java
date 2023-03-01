@@ -9,6 +9,8 @@ public class OrderPageItemDTO {
     
     private int goodCount;
     
+     private int goodStock;
+    
 	/* DB로부터 꺼내올 값 */
     private String goodName;
     
@@ -25,7 +27,6 @@ public class OrderPageItemDTO {
     
     private int totalPoint;
     
-    private int goodStock;
     
 	public int getGoodStock() {
 		return goodStock;
