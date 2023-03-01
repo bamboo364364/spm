@@ -72,7 +72,6 @@ memberAddr1 varchar2(100) not null,
 memberAddr2 varchar2(100) not null,
 memberAddr3 varchar2(100) not null,
 orderState varchar2(30) not null,
-deliveryCost number not null,
 usePoint number not null,
 orderDate date default sysdate,
 FOREIGN KEY (memberMail)REFERENCES spm_member(memberMail)
