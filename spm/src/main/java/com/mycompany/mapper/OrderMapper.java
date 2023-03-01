@@ -4,6 +4,7 @@ import com.mycompany.model.CartDTO;
 import com.mycompany.model.GoodVO;
 import com.mycompany.model.MemberVO;
 import com.mycompany.model.OrderDTO;
+import com.mycompany.model.OrderItemDTO;
 import com.mycompany.model.OrderPageItemDTO;
 
 public interface OrderMapper {
@@ -14,6 +15,9 @@ public interface OrderMapper {
 	
 	/* 주문. 주문테이블에 정보추가 */
 	public void order(OrderDTO od);
+	
+	/* 주문. 주문아이템테블에 정보추가 */
+	public int orderItem(OrderItemDTO oid);
 	
 	/* 주문. 회원 재화차감 */
 	public void orderPay(MemberVO mvp);

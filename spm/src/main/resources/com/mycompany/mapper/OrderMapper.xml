@@ -18,9 +18,16 @@
 	<insert id='order'>
 		
 		insert into spm_order
-	(orderId, memberMail, memberName, memberAddr1, memberAddr2, memberAddr3, orderState, deliveryCost, usePoint, orderDate)
-		values(#{orderId}, #{memberMail}, #{memberName}, #{memberAddr1}, #{memberAddr2}, #{memberAddr3}, '배송준비', #{deliveryCost}, #{usePoint}, sysdate )             
+	(orderId, memberMail, memberName, memberAddr1, memberAddr2, memberAddr3, orderState, usePoint, orderDate)
+		values(#{orderId}, #{memberMail}, #{memberName}, #{memberAddr1}, #{memberAddr2}, #{memberAddr3}, '배송준비', #{usePoint}, sysdate )             
 		
+	</insert>
+	
+	<!-- 주문. 주문아이템테블에 정보추가 -->
+	<insert id='orderItem'>
+		insert into spm_orderItem
+		(orderId, goodId, goodCount, goodPrice, goodDiscount, savePoint)
+		values(#{orderId}, #{goodId}, #{goodCount}, #{goodPrice}, #{goodDiscount}, #{savePoint})
 	</insert>
 	
 	<!-- 주문. 회원 재화차감 -->

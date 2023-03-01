@@ -298,8 +298,11 @@ $(".orderBtn").on("click", function(){
 	
 	
 	
-	
+	var formContents ='';
+	 
 	$(".cartItem").each(function(i, e){
+		
+		
 		
 		if($(e).find(".checkbox").is(":checked") === true){
 			
@@ -308,13 +311,14 @@ $(".orderBtn").on("click", function(){
 			let goodStock = $(e).find(".goodStock").val();
 			let goodName = $(e).find(".goodName").val();
 			let goodPrice = $(e).find(".goodPrice").data('goodprice');
-/* 			let goodDiscount = $(e).find(".goodDiscount").val();
- */			let salePrice = $(e).find(".salePrice").data('saleprice');
+			let goodDiscount = $(e).find(".goodDiscount").val();
+ 			let salePrice = $(e).find(".salePrice").data('saleprice');
 			let point = $(e).find("#point").val();
+			let uuid= $(e).find('.imageWrap').attr('uuid');
+			let uploadPath= $(e).find('.imageWrap').attr('path');
+			let fileName= $(e).find('.imageWrap').attr('fileName');
 			
-			var formContents ='';
-		
-			var inputMaker= function(i,c){
+			var inputMaker= function(i, c){
 				formContents+="<input name='orders[" + i + "]."+ Object.keys(c)[0] +"' type='hidden' value='" + Object.values(c)[0] + "'>";
 			} 
 					
@@ -325,17 +329,25 @@ $(".orderBtn").on("click", function(){
 			inputMaker(i,{goodPrice});
 			inputMaker(i,{salePrice});
 			inputMaker(i,{point});
+			inputMaker(i,{goodDiscount});
+			
+			formContents+="<input name='orders[" + i + "].imageList[0].uuid' type='hidden' value='" + uuid + "'>";
+			formContents+="<input name='orders[" + i + "].imageList[0].uploadPath' type='hidden' value='" + uploadPath + "'>";
+			formContents+="<input name='orders[" + i + "].imageList[0].fileName' type='hidden' value='" + fileName + "'>";
+			formContents+="<input name='orders[" + i + "].imageList[0].goodId' type='hidden' value='" + goodId + "'>";
+
 
 		}
 		
-		formContents+= "<input type='hidden' name='memberMail' value='"+sessionMemberMail+"'>";
+	
+		}); 
+	
+	formContents+= "<input type='hidden' name='memberMail' value='"+sessionMemberMail+"'>";
 
 		$(".orderForm").html(formContents); 
 
 		 $(".orderForm").submit();  
 	
-	
-		}); 
 	});
 	
 	
@@ -377,7 +389,7 @@ $(".orderBtn").on("click", function(){
     }
 });
 $('.input-number').focusin(function(){
-   $(this).data('oldValue', $(this).val());
+   $(this).data('oldvalue', $(this).val());
 });
 $('.input-number').change(function() {
     
@@ -390,13 +402,13 @@ $('.input-number').change(function() {
         $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
     } else {
         alert('1보다 작은값은 입력할수없습니다');
-        $(this).val($(this).data('oldValue'));
+        $(this).val($(this).data('oldvalue'));
     }
     if(valueCurrent <= maxValue) {
         $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
     } else {
         alert('재고가 부족합니다');
-        $(this).val($(this).data('oldValue'));
+        $(this).val($(this).data('oldvalue'));
     }
     
    	let existStock= $(this).attr('max');

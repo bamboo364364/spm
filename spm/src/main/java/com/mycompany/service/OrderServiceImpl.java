@@ -67,37 +67,31 @@ private OrderMapper orderMapper;
 	@Override
 	public void order(OrderDTO od, MemberVO mv){
 	
-	
+		logger.info(od.toString());
 		/* 주문번호생성 */
 		Date date= new Date();
 		SimpleDateFormat format= new SimpleDateFormat("_yyyyMMddmmss");
 		String orderId= mv.getMemberMail()+ format.format(date);
 		od.setOrderId(orderId);
 		
-		//재고용 GoodVOList
-		List<GoodVO> lgv= new ArrayList<GoodVO>();
+		orderMapper.order(od);
 		
-		//카트제거용 CartDTOList
-		List<CartDTO> lcd= new ArrayList<CartDTO>();
-		//OrderDTO 안에 OrderItemDTO 계산+ 주문번호입력+ 재고용 GoodVOList생성+ 카트제거용 CartDTOList생성
+		//orderItem+ 재고+ 카트제거
 		for(OrderItemDTO oid: od.getOrders()){
+		
 		oid.setOrderId(orderId);
-		oid.initSaleTotal();
+		orderMapper.orderItem(oid);
 		
 		GoodVO gv= new GoodVO();
 		gv.setGoodId(oid.getGoodId());
-		gv.setGoodStock( gv.getGoodStock()- oid.getGoodCount() );
-		lgv.add(gv);
+		gv.setGoodStock( oid.getGoodCount() );
+		orderMapper.stockChange(gv);
 		
 		CartDTO cd= new CartDTO();
 		cd.setGoodId(oid.getGoodId());
 		cd.setMemberMail(mv.getMemberMail());
-		lcd.add(cd);
+		orderMapper.cartDel(cd);
 		}
-		//OrderDTO계산
-		od.getOrderPriceInfo();
-		
-		orderMapper.order(od);
 		
 		//orderPay
 		int money= ( mv.getMoney()- od.getOrderFinalSalePrice() );
@@ -107,20 +101,11 @@ private OrderMapper orderMapper;
 		mvp.setPoint(point);
 		mvp.setMemberMail(mv.getMemberMail());
 		orderMapper.orderPay(mvp);
-		logger.info("lgv는"+ lgv.toString());
-		//재고변동
-		for(GoodVO gv: lgv){
-		orderMapper.stockChange(gv);
-		}
 		
-		//카트제거  카트1개씩으로변경! 카트재고1문제? ordealert
-		for(CartDTO cd: lcd){
-			orderMapper.cartDel(cd);
-		}
 		
 		
 
-	}//order //transaction
+	}
 	
 	
 	

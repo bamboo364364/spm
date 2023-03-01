@@ -1,5 +1,7 @@
 package com.mycompany.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mycompany.model.GoodVO;
 import com.mycompany.model.MemberVO;
 import com.mycompany.model.OrderDTO;
 import com.mycompany.model.OrderPageDTO;
@@ -38,7 +41,8 @@ public class OrderController {
 	@GetMapping("/orderView")
 	public void orderGet(String memberMail, OrderPageDTO opd, Model model) {
 		logger.info(opd.toString());
-		model.addAttribute("list", orderService.getGoodsInfo(opd.getOrders()));
+		logger.info(memberMail);
+		model.addAttribute("list", opd.getOrders());
 		model.addAttribute("memberInfo", memberService.getMemberInfo(memberMail));
 	
 	}
